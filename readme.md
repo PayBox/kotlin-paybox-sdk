@@ -16,7 +16,12 @@ PayBox SDK Android - это библиотека позволяющая упро
 
 **Установка:**
 
-1. Добавьте payboxsdk.aar в ваш проект.
+Добавьте в ваш build.gradle:
+```
+    dependencies {
+	    implementation 'com.github.PayBox:kotlin-paybox-sdk:0.9.2'
+	}
+```
 
 
 **Работа с SDK**
