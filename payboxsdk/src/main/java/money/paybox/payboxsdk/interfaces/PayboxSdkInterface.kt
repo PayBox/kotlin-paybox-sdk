@@ -28,7 +28,7 @@ interface PayboxSdkInterface {
      * @param extraParams доп. параметры мерчанта
      * @param paymentPaid callback от Api Paybox
      */
-    fun createPayment(amount: Float, description: String, orderId: String? = null, userId: Int? = null, extraParams: HashMap<String, String>? = null, paymentPaid: (payment: Payment?, error: Error?)->Unit)
+    fun createPayment(amount: Float, description: String, orderId: String? = null, userId: String? = null, extraParams: HashMap<String, String>? = null, paymentPaid: (payment: Payment?, error: Error?)->Unit)
 
     /**
      * Создание рекурентного платежа
@@ -53,7 +53,7 @@ interface PayboxSdkInterface {
      * @param extraParams доп. параметры мерчанта
      * @param payCreated callback от Api Paybox
      */
-    fun createCardPayment(amount: Float, userId: Int, cardId: Int, description: String, orderId: String, extraParams: HashMap<String, String>? = null, payCreated: (payment: Payment?, error: Error?)->Unit)
+    fun createCardPayment(amount: Float, userId: String, cardId: Int, description: String, orderId: String, extraParams: HashMap<String, String>? = null, payCreated: (payment: Payment?, error: Error?)->Unit)
 
     /**
      * Оплата созданного платежа, добавленной картой
@@ -104,7 +104,7 @@ interface PayboxSdkInterface {
      * @param postLink ссылка на сервис мерчанта, будет вызван после сохранения карты
      * @param cardAdded callback от Api Paybox
      */
-    fun addNewCard(userId: Int, postLink: String? = null, cardAdded: (payment: Payment?, error: Error?)->Unit)
+    fun addNewCard(userId: String, postLink: String? = null, cardAdded: (payment: Payment?, error: Error?)->Unit)
 
     /**
      * Удаление сохраненой карты
@@ -113,7 +113,7 @@ interface PayboxSdkInterface {
      * @param userId ID пользователя в системе мерчанта
      * @param removed callback от Api Paybox
      */
-    fun removeAddedCard(cardId: Int, userId: Int, removed: (card: Card?, error: Error?)->Unit)
+    fun removeAddedCard(cardId: Int, userId: String, removed: (card: Card?, error: Error?)->Unit)
 
     /**
      * Получить список сохраненых карт
@@ -121,7 +121,7 @@ interface PayboxSdkInterface {
      * @param userId ID пользователя в системе мерчанта
      * @param cardList callback от Api Paybox
      */
-    fun getAddedCards(userId: Int, cardList: (cards: ArrayList<Card>?, error: Error?)->Unit)
+    fun getAddedCards(userId: String, cardList: (cards: ArrayList<Card>?, error: Error?)->Unit)
 
     /**
      * Настройки Sdk

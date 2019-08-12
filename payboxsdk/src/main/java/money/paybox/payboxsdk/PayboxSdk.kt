@@ -57,7 +57,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         amount: Float,
         description: String,
         orderId: String?,
-        userId: Int?,
+        userId: String?,
         extraParams: HashMap<String, String>?,
         paymentPaid: (payment: Payment?, error: Error?) -> Unit
     ) {
@@ -67,7 +67,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
             params[Params.ORDER_ID] = it
         }
         userId?.let {
-            params[Params.USER_ID] = userId.toString()
+            params[Params.USER_ID] = userId
         }
         params[Params.AMOUNT] = amount.toString()
         params[Params.DESCRIPTION] = description
@@ -126,28 +126,28 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         helper.initConnection(Urls.CANCEL_URL, params)
     }
 
-    override fun addNewCard( userId: Int, postLink: String?, cardAdded: (payment: Payment?, error: Error?) -> Unit) {
+    override fun addNewCard( userId: String, postLink: String?, cardAdded: (payment: Payment?, error: Error?) -> Unit) {
         this.cardAddingReference = cardAdded
         val params = configs.getParams()
-        params[Params.USER_ID] = userId.toString()
+        params[Params.USER_ID] = userId
         postLink?.let {
             params[Params.POST_LINK] = it
         }
         helper.initConnection(Urls.CARD_MERCHANT(configs.merchantId.toString())+ Urls.ADDCARD_URL, params)
     }
 
-    override fun removeAddedCard(cardId: Int, userId: Int, removed: (card: Card?, error: Error?) -> Unit) {
+    override fun removeAddedCard(cardId: Int, userId: String, removed: (card: Card?, error: Error?) -> Unit) {
         this.cardRemovedReference = removed
         val params = configs.getParams()
         params[Params.CARD_ID] = cardId.toString()
-        params[Params.USER_ID] = userId.toString()
+        params[Params.USER_ID] = userId
         helper.initConnection(Urls.CARD_MERCHANT(configs.merchantId.toString())+ Urls.REMOVECARD_URL, params)
     }
 
-    override fun getAddedCards(userId: Int, cardList: (cards: ArrayList<Card>?, error: Error?) -> Unit) {
+    override fun getAddedCards(userId: String, cardList: (cards: ArrayList<Card>?, error: Error?) -> Unit) {
         this.cardListReference = cardList
         val params = configs.getParams()
-        params[Params.USER_ID] = userId.toString()
+        params[Params.USER_ID] = userId
         helper.initConnection(Urls.CARD_MERCHANT(configs.merchantId.toString())+ Urls.LISTCARD_URL, params)
     }
 
@@ -171,7 +171,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
 
     override fun createCardPayment(
         amount: Float,
-        userId: Int,
+        userId: String,
         cardId: Int,
         description: String,
         orderId: String,
@@ -182,7 +182,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         val params = configs.getParams(extraParams)
         params[Params.ORDER_ID] = orderId
         params[Params.AMOUNT] = amount.toString()
-        params[Params.USER_ID] = userId.toString()
+        params[Params.USER_ID] = userId
         params[Params.CARD_ID] = cardId.toString()
         params[Params.DESCRIPTION] = description
         helper.initConnection(Urls.CARD_PAY(configs.merchantId.toString())+ Urls.CARDINITPAY, params)
