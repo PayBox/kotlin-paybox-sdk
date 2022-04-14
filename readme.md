@@ -35,7 +35,7 @@ allprojects {
 2.Добавьте в ваш build.gradle:
 ```
 dependencies {
-	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.9.8'
+	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.9.9'
 }
 ```
 ---
