@@ -11,7 +11,7 @@ class ConfigurationImp(val merchantId: Int): Configuration {
     private var userPhone: String? = null
     private var userEmail: String? = null
     private var testMode = true
-    private var paymentSystem = PaymentSystem.EPAYWEBKZT
+    private var paymentSystem = PaymentSystem.NONE
     private var requestMethod = RequestMethod.POST
     private var language = Language.ru
     private var autoClearing = false
@@ -104,7 +104,7 @@ class ConfigurationImp(val merchantId: Int): Configuration {
         val params = HashMap<String, String>()
         params[Params.MERCHANT_ID] = this.merchantId.toString()
         params[Params.TEST_MODE] = this.testMode.stringValue()
-        params[Params.PAYMENT_SYSTEM] = this.paymentSystem.name
+        params[Params.PAYMENT_SYSTEM] = if(this.paymentSystem.name == "NONE") "" else this.paymentSystem.name
         return params
     }
 
@@ -124,7 +124,8 @@ class ConfigurationImp(val merchantId: Int): Configuration {
         params[Params.LIFETIME] = this.paymentLifetime.toString()
         params[Params.ENCODING] = this.encoding
         params[Params.RECURRING_LIFETIME] = this.recurringLifetime.toString()
-        params[Params.PAYMENT_SYSTEM] = this.paymentSystem.name
+        params[Params.PAYMENT_SYSTEM] = if(this.paymentSystem.name == "NONE") "" else this.paymentSystem.name
+        params[Params.TIMEOUT_AFTER_PAYMENT] = "0"
         params[Params.SUCCESS_METHOD] = "GET"
         params[Params.FAILURE_METHOD] = "GET"
         params[Params.SUCCESS_URL] = this.successUrl
