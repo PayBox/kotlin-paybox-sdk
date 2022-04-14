@@ -1,18 +1,22 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'maven-publish'
-group = 'com.github.paybox'
-version = '0.9.8'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'maven-publish'
+}
 
 android {
-    compileSdkVersion 28
+    signingConfigs {
+        release {
+        }
+    }
+    compileSdk 28
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
+        minSdk 19
+        targetSdk 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -20,11 +24,28 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+    project.afterEvaluate {
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    artifact bundleReleaseAar
+                }
+            }
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
