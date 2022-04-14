@@ -77,4 +77,5 @@ object Params {
     val RECURRING_PROFILE = "pg_recurring_profile"
     val AMOUNT = "pg_amount"
     val PAYMENT_ID = "pg_payment_id"
+    val TIMEOUT_AFTER_PAYMENT = "pg_timeout_after_payment"
 }
