@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven-publish'
+group = 'com.github.paybox'
+version = '0.9.8'
 
 android {
     compileSdkVersion 28
