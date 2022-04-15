@@ -78,4 +78,5 @@ object Params {
     val AMOUNT = "pg_amount"
     val PAYMENT_ID = "pg_payment_id"
     val TIMEOUT_AFTER_PAYMENT = "pg_timeout_after_payment"
+    val PAYMENT_ROUTE = "pg_payment_route"
 }
