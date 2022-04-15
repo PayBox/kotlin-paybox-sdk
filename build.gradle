@@ -15,23 +15,6 @@ buildscript {
     }
 }
 
-//plugins {
-//    id 'maven-publish'
-//}
-
-//project.afterEvaluate {
-//    publishing {
-//        publications {
-//            release(MavenPublication) {
-//                from components.release_apk
-//                groupId = "com.github.paybox"
-//                artifactId = "kotlin-paybox-sdk"
-//                version = "0.9.9"
-//            }
-//        }
-//    }
-//}
-
 allprojects {
     repositories {
         google()

@@ -35,7 +35,7 @@ allprojects {
 2.Добавьте в ваш build.gradle:
 ```
 dependencies {
-	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.9.9'
+	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.9.10'
 }
 ```
 ---
@@ -137,6 +137,11 @@ dependencies {
     sdk.config().setRefundUrl(url)
     sdk.config().setClearingUrl(url)
     sdk.config().setRequestMethod(requestMethod)
+```
+
+*Для выбора Frame вместо платежной страницы:*
+```
+    sdk.config().setFrameRequired(true) //false по умолчанию
 ```
 ---
 

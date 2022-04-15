@@ -120,4 +120,11 @@ interface Configuration {
      * @param code код вылюты, пример: KZT, USD, EUR
      */
     fun setCurrencyCode(code: String)
+
+    /**
+     * Установка фрейма вместо платежной страницы при оплате
+     * @return
+     * @param isFrameRequired значение true если необходимо отображать фрейм вместо платежной страницы
+     */
+    fun setFrameRequired(isFrameRequired: Boolean)
 }

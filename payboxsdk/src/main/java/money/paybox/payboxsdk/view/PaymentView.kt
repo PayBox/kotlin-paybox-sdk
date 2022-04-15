@@ -16,6 +16,7 @@ class PaymentView : FrameLayout {
 
     private lateinit var webView: WebView
     private var sOf: ((isSuccess: Boolean) -> Unit)? = null
+    private var isFrame = true
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(
         context,
@@ -40,6 +41,7 @@ class PaymentView : FrameLayout {
         if (url.startsWith("https://api.paybox.money") || url.startsWith("https://customer.paybox.money")) {
             this.webView.loadUrl(url)
             this.sOf = sucessOrFailure
+            isFrame = !url.contains("pay.html")
         }
     }
     var listener: WebListener? = null
@@ -68,6 +70,7 @@ class PaymentView : FrameLayout {
                 if (url == null) {
                     return false
                 }
+
                 when {
                     url.contains("success") -> {
                         callSdk(url)
@@ -85,6 +88,10 @@ class PaymentView : FrameLayout {
     }
 
     private fun callSdk(url: String){
+        if(!isFrame) {
+            this@PaymentView.visibility = GONE
+        }
+
         sOf?.let {
             it(url.contains("success"))
         }

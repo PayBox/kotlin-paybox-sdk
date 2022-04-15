@@ -26,6 +26,7 @@ class ConfigurationImp(val merchantId: Int): Configuration {
     private var currencyCode: String = "KZT"
     private val successUrl = Urls.BASE_URL +"success"
     private val failureUrl = Urls.BASE_URL +"failure"
+    private var isFrameRequired = false
 
     override fun setUserPhone(userPhone: String) {
         this.userPhone = userPhone
@@ -91,6 +92,10 @@ class ConfigurationImp(val merchantId: Int): Configuration {
         this.currencyCode = code
     }
 
+    override fun setFrameRequired(isRequired: Boolean) {
+        this.isFrameRequired = isRequired
+    }
+
     private fun Boolean.stringValue(): String {
         return if (this) {
             "1"
@@ -125,6 +130,7 @@ class ConfigurationImp(val merchantId: Int): Configuration {
         params[Params.ENCODING] = this.encoding
         params[Params.RECURRING_LIFETIME] = this.recurringLifetime.toString()
         params[Params.PAYMENT_SYSTEM] = if(this.paymentSystem.name == "NONE") "" else this.paymentSystem.name
+        params[Params.PAYMENT_ROUTE] = if(this.isFrameRequired) "frame" else ""
         params[Params.TIMEOUT_AFTER_PAYMENT] = "0"
         params[Params.SUCCESS_METHOD] = "GET"
         params[Params.FAILURE_METHOD] = "GET"
