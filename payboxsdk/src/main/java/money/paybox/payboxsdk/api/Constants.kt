@@ -8,6 +8,8 @@ object Urls {
     val CANCEL_URL = BASE_URL +"cancel.php"
     val CLEARING_URL = BASE_URL +"do_capture.php"
     val RECURRING_URL = BASE_URL +"make_recurring_payment.php"
+    val SUCCESS_URL = BASE_URL +"success"
+    val FAILURE_URL = BASE_URL +"failure"
     val CARDSTORAGE = "/cardstorage/"
     val CARD = "/card/"
     val LISTCARD_URL = "list"

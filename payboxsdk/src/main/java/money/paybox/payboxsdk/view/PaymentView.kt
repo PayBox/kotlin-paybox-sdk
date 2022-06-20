@@ -10,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
+import money.paybox.payboxsdk.api.Urls
 import money.paybox.payboxsdk.interfaces.WebListener
 
 class PaymentView : FrameLayout {
@@ -71,17 +72,12 @@ class PaymentView : FrameLayout {
                     return false
                 }
 
-                when {
-                    url.contains("success") -> {
-                        callSdk(url)
-                        view?.loadUrl("about:blank")
-                    }
-                    url.contains("failure") -> {
-                        callSdk(url)
-                        view?.loadUrl("about:blank")
-                    }
-                    else -> view?.loadUrl(url)
+                if (url.startsWith(Urls.SUCCESS_URL) || url.startsWith(Urls.FAILURE_URL)){
+                    callSdk(url)
+                    view?.loadUrl("about:blank")
                 }
+                else view?.loadUrl(url)
+
                 return true
             }
         }
@@ -93,7 +89,7 @@ class PaymentView : FrameLayout {
         }
 
         sOf?.let {
-            it(url.contains("success"))
+            it(url.startsWith(Urls.SUCCESS_URL))
         }
     }
 
