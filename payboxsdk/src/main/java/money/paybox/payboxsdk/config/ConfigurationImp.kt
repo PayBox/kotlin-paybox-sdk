@@ -24,8 +24,6 @@ class ConfigurationImp(val merchantId: Int): Configuration {
     private var refundUrl: String? = null
     private var captureUrl: String? = null
     private var currencyCode: String = "KZT"
-    private val successUrl = Urls.BASE_URL +"success"
-    private val failureUrl = Urls.BASE_URL +"failure"
     private var isFrameRequired = false
 
     override fun setUserPhone(userPhone: String) {
@@ -134,10 +132,10 @@ class ConfigurationImp(val merchantId: Int): Configuration {
         params[Params.TIMEOUT_AFTER_PAYMENT] = "0"
         params[Params.SUCCESS_METHOD] = "GET"
         params[Params.FAILURE_METHOD] = "GET"
-        params[Params.SUCCESS_URL] = this.successUrl
-        params[Params.FAILURE_URL] = this.failureUrl
-        params[Params.BACK_LINK] = this.successUrl
-        params[Params.POST_LINK] = this.successUrl
+        params[Params.SUCCESS_URL] = Urls.SUCCESS_URL
+        params[Params.FAILURE_URL] = Urls.FAILURE_URL
+        params[Params.BACK_LINK] = Urls.SUCCESS_URL
+        params[Params.POST_LINK] = Urls.SUCCESS_URL
         params[Params.LANGUAGE] = this.language.name
         if (!TextUtils.isEmpty(this.userPhone)) {
             params[Params.USER_PHONE] = this.userPhone!!
