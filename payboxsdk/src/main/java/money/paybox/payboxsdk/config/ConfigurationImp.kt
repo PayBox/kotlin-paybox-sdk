@@ -118,15 +118,19 @@ class ConfigurationImp(val merchantId: Int): Configuration {
                 params.putAll(extraParams)
             }
         }
+
+        if(recurringMode) {
+            params[Params.RECURRING_START] = this.recurringMode.stringValue()
+            params[Params.RECURRING_LIFETIME] = this.recurringLifetime.toString()
+        }
+
         params[Params.MERCHANT_ID] = this.merchantId.toString()
         params[Params.TEST_MODE] = this.testMode.stringValue()
-        params[Params.RECURRING_START] = this.recurringMode.stringValue()
         params[Params.AUTOCLEARING] = this.autoClearing.stringValue()
         params[Params.REQUEST_METHOD] = this.requestMethod.name
         params[Params.CURRENCY] = this.currencyCode
         params[Params.LIFETIME] = this.paymentLifetime.toString()
         params[Params.ENCODING] = this.encoding
-        params[Params.RECURRING_LIFETIME] = this.recurringLifetime.toString()
         params[Params.PAYMENT_SYSTEM] = if(this.paymentSystem.name == "NONE") "" else this.paymentSystem.name
         params[Params.PAYMENT_ROUTE] = if(this.isFrameRequired) "frame" else ""
         params[Params.TIMEOUT_AFTER_PAYMENT] = "0"
