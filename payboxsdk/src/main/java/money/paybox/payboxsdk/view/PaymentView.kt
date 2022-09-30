@@ -65,7 +65,7 @@ class PaymentView : FrameLayout {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 listener?.onLoadFinished()
-                if (url.startsWith(Urls.SUCCESS_URL) || url.startsWith(Urls.FAILURE_URL)){
+                if (url != null && (url.startsWith(Urls.SUCCESS_URL) || url.startsWith(Urls.FAILURE_URL))){
                     callSdk(url)
                 }
             }
