@@ -1,7 +1,7 @@
 package money.paybox.payboxsdk.api
 
 object Urls {
-    val BASE_URL = "https://api.paybox.money/"
+    val BASE_URL = "https://api.freedompay.money/"
     val STATUS_URL = BASE_URL +"get_status.php"
     val INIT_PAYMENT_URL = BASE_URL + "init_payment.php"
     val REVOKE_URL = BASE_URL +"revoke.php"
