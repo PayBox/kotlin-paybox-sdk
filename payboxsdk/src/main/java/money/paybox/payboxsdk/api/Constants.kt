@@ -2,6 +2,7 @@ package money.paybox.payboxsdk.api
 
 object Urls {
     val BASE_URL = "https://api.paybox.money/"
+    val FREEDOM_BASE_URL = "https://api.paybox.money/"
     val STATUS_URL = BASE_URL +"get_status.php"
     val INIT_PAYMENT_URL = BASE_URL + "init_payment.php"
     val REVOKE_URL = BASE_URL +"revoke.php"
@@ -17,11 +18,15 @@ object Urls {
     val ADDCARD_URL = "add"
     val PAY = "pay"
     val REMOVECARD_URL = "remove"
+    val DIRECT = "direct"
     fun CARD_PAY(merchant_id: String): String {
         return BASE_URL + "v1/merchant/" + merchant_id + CARD
     }
     fun CARD_MERCHANT(merchant_id: String): String {
         return BASE_URL + "v1/merchant/" + merchant_id + CARDSTORAGE
+    }
+    fun NONACCEPTANCE_DIRECT(merchant_id: String): String {
+        return FREEDOM_BASE_URL + "v1/merchant/" + merchant_id + CARD + DIRECT
     }
 }
 
@@ -81,4 +86,5 @@ object Params {
     val PAYMENT_ID = "pg_payment_id"
     val TIMEOUT_AFTER_PAYMENT = "pg_timeout_after_payment"
     val PAYMENT_ROUTE = "pg_payment_route"
+    val CARD_TOKEN = "pg_card_token"
 }

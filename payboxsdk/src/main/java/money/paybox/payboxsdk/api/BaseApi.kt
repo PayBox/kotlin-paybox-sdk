@@ -97,9 +97,24 @@ abstract class BaseApi: Signing() {
 
     private fun JSONObject.getPayment(): Payment {
         return Payment(
-            this.optResponse(Params.STATUS),
-            this.optResponse(Params.PAYMENT_ID)?.toIntOrNull(),
-            this.optResponse(Params.REDIRECT_URL)
+            status = this.optResponse(Params.STATUS),
+            paymentId = this.optResponse(Params.PAYMENT_ID)?.toIntOrNull(),
+            merchantId = this.optResponse(Params.MERCHANT_ID)?.toIntOrNull(),
+            orderId = this.optResponse(Params.ORDER_ID)?.toIntOrNull(),
+            salt = this.optResponse(Params.SALT),
+            sig = this.optResponse(Params.SIG),
+            redirectUrl = this.optResponse(Params.REDIRECT_URL)
+        )
+    }
+
+    private fun JSONObject.getNonAcceptablePayment(): Payment {
+        return Payment(
+            status = this.optResponse(Params.STATUS),
+            paymentId = this.optResponse(Params.PAYMENT_ID)?.toIntOrNull(),
+            merchantId = this.optResponse(Params.MERCHANT_ID)?.toIntOrNull(),
+            orderId = this.optResponse(Params.ORDER_ID)?.toIntOrNull(),
+            salt = this.optResponse(Params.SALT),
+            sig = this.optResponse(Params.SIG)
         )
     }
 
@@ -147,7 +162,8 @@ abstract class BaseApi: Signing() {
             this.optString(Params.CARD_ID),
             this.optString(Params.RECURRING_PROFILE_ID),
             this.optString(Params.CARD_HASH),
-            this.optString(Params.CARD_CREATED_AT)
+            this.optString(Params.CARD_CREATED_AT),
+            this.optString(Params.CARD_TOKEN)
         )
     }
 
@@ -221,6 +237,9 @@ abstract class BaseApi: Signing() {
             }
             url.contains(Urls.CARD + Urls.CARDINITPAY) -> {
                 this.listener.onCardPayInited(json?.getPayment(), error)
+            }
+            url.contains(Urls.CARD + Urls.DIRECT) -> {
+                this.listener.onNonAcceptanceDirected(json?.getNonAcceptablePayment(), error)
             }
         }
     }

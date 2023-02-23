@@ -29,6 +29,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
     private var cardListReference: ((cards: ArrayList<Card>?, error: Error?)->Unit)? = null
     private var cardRemovedReference: ((card: Card?, error: Error?)->Unit)? = null
     private var recurringPaidReference: ((recurringPayment: RecurringPayment?, error: Error?)->Unit)? = null
+    private var nonAcceptancePaidReference: ((payment: Payment?, error: Error?)->Unit)? = null
     override lateinit var secretKey: String
 
     private constructor(merchantId: Int, secretKey: String) : this() {
@@ -91,6 +92,18 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         params[Params.DESCRIPTION] = description
         params[Params.RECURRING_PROFILE] = recurringProfile
         helper.initConnection(Urls.RECURRING_URL, params)
+    }
+
+    override fun createNonAcceptancePayment(
+        paymentId: Int?,
+        merchantId: Int?,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    ) {
+        this.nonAcceptancePaidReference = paymentPaid
+        val params: HashMap<String, String> = hashMapOf()
+        params[Params.MERCHANT_ID] = merchantId.toString()
+        params[Params.PAYMENT_ID] = paymentId.toString()
+        helper.initConnection(Urls.NONACCEPTANCE_DIRECT(merchantId.toString()), params)
     }
 
     override fun getPaymentStatus(paymentId: Int, status: (status: Status?, error: Error?) -> Unit) {
@@ -188,6 +201,29 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         helper.initConnection(Urls.CARD_PAY(configs.merchantId.toString())+ Urls.CARDINITPAY, params)
     }
 
+    override fun createCardPayment(
+        amount: Float,
+        userId: String,
+        cardToken: String,
+        description: String,
+        orderId: String,
+        extraParams: HashMap<String, String>?,
+        payCreated: (payment: Payment?, error: Error?) -> Unit
+    ) {
+        cardPayInitReference = payCreated
+        val params = configs.getParams(extraParams)
+        params[Params.ORDER_ID] = orderId
+        params[Params.AMOUNT] = amount.toString()
+        params[Params.USER_ID] = userId
+        params[Params.DESCRIPTION] = description
+        params[Params.CARD_TOKEN] = cardToken
+
+        helper.initConnection(
+            Urls.CARD_PAY(configs.merchantId.toString()) + Urls.CARDINITPAY,
+            params
+        )
+    }
+
     override fun config(): Configuration {
         return configs
     }
@@ -278,6 +314,15 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
     override fun onCapture(capture: Capture?, error: Error?) {
         captureReference?.let {
             it(capture, error)
+        }
+    }
+
+    override fun onNonAcceptanceDirected(
+        payment: Payment?,
+        error: Error?
+    ) {
+        nonAcceptancePaidReference?.let {
+            it(payment, error)
         }
     }
 }
