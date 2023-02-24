@@ -5,7 +5,5 @@ data class Payment(
     open val paymentId: Int? = null,
     val redirectUrl: String? = null,
     val merchantId: Int? = null,
-    val orderId: Int? = null,
-    val salt: String? = null,
-    val sig: String? = null
+    val orderId: Int? = null
 )

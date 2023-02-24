@@ -326,4 +326,3 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         }
     }
 }
-
