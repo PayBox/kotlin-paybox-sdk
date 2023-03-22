@@ -39,11 +39,9 @@ class PaymentView : FrameLayout {
     }
 
     fun loadPaymentPage(url: String, sucessOrFailure: (isSuccess: Boolean) -> Unit) {
-        if (url.startsWith("https://api.paybox.money") || url.startsWith("https://customer.paybox.money")) {
-            this.webView.loadUrl(url)
-            this.sOf = sucessOrFailure
-            isFrame = !url.contains("pay.html")
-        }
+        this.webView.loadUrl(url)
+        this.sOf = sucessOrFailure
+        isFrame = !url.contains("pay.html")
     }
     var listener: WebListener? = null
 
