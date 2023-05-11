@@ -15,15 +15,20 @@ import java.util.*
 import java.util.concurrent.TimeoutException
 import javax.net.ssl.HttpsURLConnection
 
-abstract class BaseApi: Signing() {
+private const val UTF8 = "UTF-8"
+private const val TIMEOUT = 25000
+
+abstract class BaseApi : Signing() {
 
     abstract val listener: ApiListener
+
     @SuppressLint("StaticFieldLeak")
     fun request(requestData: () -> RequestData) {
         object : AsyncTask<Void, Void, ResponseData>() {
             override fun doInBackground(vararg params: Void?): ResponseData {
                 return connection(requestData())
             }
+
             override fun onPostExecute(result: ResponseData?) {
                 resolveResponse(result)
             }
@@ -35,8 +40,7 @@ abstract class BaseApi: Signing() {
             val urlCon = URL(requestData.url)
             HttpsURLConnection.setDefaultSSLSocketFactory(TLSSocketFactory())
             val connection = urlCon.openConnection() as HttpsURLConnection
-            connection.connectTimeout = 25000
-            connection.connectTimeout = 25000
+            connection.connectTimeout = TIMEOUT
             connection.requestMethod = requestData.method.name
             connection.useCaches = false
             connection.allowUserInteraction = false
@@ -44,7 +48,7 @@ abstract class BaseApi: Signing() {
             connection.doOutput = false
             val stream = connection.outputStream
             val writer = BufferedWriter(
-                OutputStreamWriter(stream, "UTF-8")
+                OutputStreamWriter(stream, UTF8)
             )
             writer.write(makeParams(requestData.params))
             writer.flush()
@@ -81,16 +85,16 @@ abstract class BaseApi: Signing() {
             } else {
                 result.append("&")
             }
-            result.append(URLEncoder.encode(key, "UTF-8"))
+            result.append(URLEncoder.encode(key, UTF8))
             result.append("=")
-            result.append(URLEncoder.encode(value, "UTF-8"))
+            result.append(URLEncoder.encode(value, UTF8))
         }
         return result.toString()
     }
 
     private fun JSONObject.optResponse(key: String): String? {
         if (this.has(Params.RESPONSE)) {
-            return this.optJSONObject(Params.RESPONSE).optString(key)
+            return this.optJSONObject(Params.RESPONSE)?.optString(key)
         }
         return null
     }
@@ -125,10 +129,10 @@ abstract class BaseApi: Signing() {
 
     private fun JSONObject.getCards(): ArrayList<Card> {
         val arrayCard = ArrayList<Card>()
-        val arrayCards = this.optJSONObject(Params.RESPONSE).optJSONArray("card")
-        val cardObject = this.optJSONObject(Params.RESPONSE).optJSONObject("card")
+        val arrayCards = this.optJSONObject(Params.RESPONSE)?.optJSONArray(Params.CARD)
+        val cardObject = this.optJSONObject(Params.RESPONSE)?.optJSONObject(Params.CARD)
         if (arrayCards != null) {
-            for(i in 0 until arrayCards.length()) {
+            for (i in 0 until arrayCards.length()) {
                 arrayCard.add(
                     arrayCards.optJSONObject(i).getCard()
                 )
@@ -164,33 +168,35 @@ abstract class BaseApi: Signing() {
 
     fun resolveResponse(responseData: ResponseData?) {
         responseData?.let {
-            if (!responseData.error) {
-                if (responseData.response.contains(Params.RESPONSE)) {
+            if (!it.error) {
+                if (it.response.contains(Params.RESPONSE)) {
                     try {
-                        val json = XML.toJSONObject(responseData.response, true)
-                        if (json.optResponse(Params.STATUS) != "error") {
-                            apiHandler(responseData.url, json, null)
+                        val json = XML.toJSONObject(it.response, true)
+                        if (json.optResponse(Params.STATUS) != Params.ERROR) {
+                            apiHandler(it.url, json, null)
                         } else {
                             val code = json.optResponse(Params.ERROR_CODE)
                             val description = json.optResponse(Params.ERROR_DESCRIPTION)
-                            apiHandler(responseData.url, null, Error(
-                                code?.toInt() ?: 520, description ?: Params.UNKNOWN_ERROR
-                            ))
+                            apiHandler(
+                                it.url, null, Error(
+                                    code?.toInt() ?: 520, description ?: Params.UNKNOWN_ERROR
+                                )
+                            )
                         }
                     } catch (e: Exception) {
-                        apiHandler(responseData.url, null, Error(0, Params.FORMAT_ERROR))
+                        apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR))
                     }
                 } else {
-                    apiHandler(responseData.url, null, Error(0, Params.FORMAT_ERROR))
+                    apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR))
                 }
             } else {
-                apiHandler(responseData.url, null, Error(responseData.code, responseData.response))
+                apiHandler(it.url, null, Error(it.code, it.response))
             }
         }
 
     }
 
-    private fun apiHandler(url: String, json: JSONObject?, error: Error?){
+    private fun apiHandler(url: String, json: JSONObject?, error: Error?) {
         when {
             url.contains(Urls.INIT_PAYMENT_URL) -> {
                 this.listener.onPaymentInited(json?.getPayment(), error)

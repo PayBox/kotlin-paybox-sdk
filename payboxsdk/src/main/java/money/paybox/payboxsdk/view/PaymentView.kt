@@ -18,17 +18,27 @@ class PaymentView : FrameLayout {
     private lateinit var webView: WebView
     private var sOf: ((isSuccess: Boolean) -> Unit)? = null
     private var isFrame = true
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(
         context,
-        attrs)
+        attrs
+    )
+
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
+        context!!,
         attrs,
-        defStyleAttr)
+        defStyleAttr
+    )
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(
-        context,
+    constructor(
+        context: Context?,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int
+    ) : super(
+        context!!,
         attrs,
         defStyleAttr,
         defStyleRes
@@ -38,16 +48,17 @@ class PaymentView : FrameLayout {
         initWebview()
     }
 
-    fun loadPaymentPage(url: String, sucessOrFailure: (isSuccess: Boolean) -> Unit) {
-        if (url.startsWith("https://api.paybox.money") || url.startsWith("https://customer.paybox.money")) {
+    fun loadPaymentPage(url: String, successOrFailure: (isSuccess: Boolean) -> Unit) {
+        if (url.startsWith(Urls.BASE_URL) || url.startsWith(Urls.CUSTOMER_URL)) {
             this.webView.loadUrl(url)
-            this.sOf = sucessOrFailure
-            isFrame = !url.contains("pay.html")
+            this.sOf = successOrFailure
+            isFrame = !url.contains(Urls.PAY_HTML)
         }
     }
+
     var listener: WebListener? = null
 
-    fun initWebview() {
+    private fun initWebview() {
         webView = WebView(context)
         addView(webView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         val webSettings = webView.settings
@@ -55,7 +66,7 @@ class PaymentView : FrameLayout {
         webSettings.allowFileAccess = true
         webSettings.allowFileAccessFromFileURLs = true
         webSettings.allowUniversalAccessFromFileURLs = true
-        webView.webViewClient = object: WebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -72,19 +83,18 @@ class PaymentView : FrameLayout {
                     return false
                 }
 
-                if (url.startsWith(Urls.SUCCESS_URL) || url.startsWith(Urls.FAILURE_URL)){
+                if (url.startsWith(Urls.SUCCESS_URL) || url.startsWith(Urls.FAILURE_URL)) {
                     callSdk(url)
-                    view?.loadUrl("about:blank")
-                }
-                else view?.loadUrl(url)
+                    view?.loadUrl(Urls.ABOUT_BLANK)
+                } else view?.loadUrl(url)
 
                 return true
             }
         }
     }
 
-    private fun callSdk(url: String){
-        if(!isFrame) {
+    private fun callSdk(url: String) {
+        if (!isFrame) {
             this@PaymentView.visibility = GONE
         }
 
@@ -122,41 +132,45 @@ class PaymentView : FrameLayout {
     }
 
     override fun addView(child: View?) {
-        if (this.childCount>=1) {
+        if (this.childCount >= 1) {
             return
         }
         super.addView(child)
     }
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
-        if (this.childCount>=1) {
+        if (this.childCount >= 1) {
             return
         }
         super.addView(child, index, params)
     }
 
     override fun addView(child: View?, index: Int) {
-        if (this.childCount>=1) {
+        if (this.childCount >= 1) {
             return
         }
         super.addView(child, index)
     }
 
     override fun addView(child: View?, params: ViewGroup.LayoutParams?) {
-        if (this.childCount>=1) {
+        if (this.childCount >= 1) {
             return
         }
         super.addView(child, params)
     }
 
     override fun addView(child: View?, width: Int, height: Int) {
-        if (this.childCount>=1) {
+        if (this.childCount >= 1) {
             return
         }
         super.addView(child, width, height)
     }
 
-    override fun addViewInLayout(child: View?, index: Int, params: ViewGroup.LayoutParams?): Boolean {
+    override fun addViewInLayout(
+        child: View?,
+        index: Int,
+        params: ViewGroup.LayoutParams?
+    ): Boolean {
         return true
     }
 
