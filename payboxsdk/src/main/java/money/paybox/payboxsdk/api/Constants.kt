@@ -86,4 +86,7 @@ object Params {
     const val PAYMENT_ROUTE = "pg_payment_route"
     const val CARD = "card"
     const val ERROR = "error"
+    const val NONE = "NONE"
+    const val FRAME = "frame"
+    const val GET = "GET"
 }
