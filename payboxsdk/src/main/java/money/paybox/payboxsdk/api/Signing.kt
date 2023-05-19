@@ -3,7 +3,6 @@ package money.paybox.payboxsdk.api
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.*
-import kotlin.Comparator
 import kotlin.collections.HashMap
 
 abstract class Signing {

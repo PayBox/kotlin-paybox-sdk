@@ -198,7 +198,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         }
         paymentView?.get()?.loadPaymentPage(url) { success ->
             if (success) {
-                paymentPaid(Payment("success", null, null), null)
+                paymentPaid(Payment("success"), null)
             } else {
                 paymentPaid(null, Error(10, Params.PAYMENT_FAILURE))
             }
