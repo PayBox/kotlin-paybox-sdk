@@ -153,7 +153,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
             params[Params.POST_LINK] = it
         }
         helper.initConnection(
-            Urls.CARD_MERCHANT(configs.merchantId.toString()) + Urls.ADDCARD_URL,
+            Urls.cardMerchant(configs.merchantId.toString()) + Urls.ADDCARD_URL,
             params
         )
     }
@@ -168,7 +168,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         params[Params.CARD_ID] = cardId.toString()
         params[Params.USER_ID] = userId
         helper.initConnection(
-            Urls.CARD_MERCHANT(configs.merchantId.toString()) + Urls.REMOVECARD_URL,
+            Urls.cardMerchant(configs.merchantId.toString()) + Urls.REMOVECARD_URL,
             params
         )
     }
@@ -181,7 +181,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         val params = configs.getParams()
         params[Params.USER_ID] = userId
         helper.initConnection(
-            Urls.CARD_MERCHANT(configs.merchantId.toString()) + Urls.LISTCARD_URL,
+            Urls.cardMerchant(configs.merchantId.toString()) + Urls.LISTCARD_URL,
             params
         )
     }
@@ -192,7 +192,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
     ) {
         val params = configs.defParams()
         params[Params.PAYMENT_ID] = paymentId.toString()
-        var url = Urls.CARD_PAY(configs.merchantId.toString()).plus(Urls.PAY).plus("?")
+        var url = Urls.cardPay(configs.merchantId.toString()).plus(Urls.PAY).plus("?")
         params.signedParams(Urls.PAY).forEach {
             url += "${it.key}=${it.value}&"
         }
@@ -223,7 +223,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         params[Params.CARD_ID] = cardId.toString()
         params[Params.DESCRIPTION] = description
         helper.initConnection(
-            Urls.CARD_PAY(configs.merchantId.toString()) + Urls.CARDINITPAY,
+            Urls.cardPay(configs.merchantId.toString()) + Urls.CARDINITPAY,
             params
         )
     }

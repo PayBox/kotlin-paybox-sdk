@@ -3,16 +3,16 @@ package money.paybox.payboxsdk.api
 object Urls {
     const val BASE_URL = "https://api.paybox.money/"
     const val CUSTOMER_URL = "https://customer.paybox.money"
-    const val STATUS_URL = BASE_URL +"get_status.php"
-    const val INIT_PAYMENT_URL = BASE_URL + "init_payment.php"
-    const val REVOKE_URL = BASE_URL +"revoke.php"
-    const val CANCEL_URL = BASE_URL +"cancel.php"
-    const val CLEARING_URL = BASE_URL +"do_capture.php"
-    const val RECURRING_URL = BASE_URL +"make_recurring_payment.php"
+    const val STATUS_URL = "${BASE_URL}get_status.php"
+    const val INIT_PAYMENT_URL = "${BASE_URL}init_payment.php"
+    const val REVOKE_URL = "${BASE_URL}revoke.php"
+    const val CANCEL_URL = "${BASE_URL}cancel.php"
+    const val CLEARING_URL = "${BASE_URL}do_capture.php"
+    const val RECURRING_URL = "${BASE_URL}make_recurring_payment.php"
     const val PAY_HTML = "pay.html"
     const val ABOUT_BLANK = "about:blank"
-    const val SUCCESS_URL = BASE_URL +"success"
-    const val FAILURE_URL = BASE_URL +"failure"
+    const val SUCCESS_URL = "${BASE_URL}success"
+    const val FAILURE_URL = "${BASE_URL}failure"
     const val CARDSTORAGE = "/cardstorage/"
     const val CARD = "/card/"
     const val LISTCARD_URL = "list"
@@ -20,11 +20,12 @@ object Urls {
     const val ADDCARD_URL = "add"
     const val PAY = "pay"
     const val REMOVECARD_URL = "remove"
-    fun CARD_PAY(merchant_id: String): String {
-        return BASE_URL + "v1/merchant/" + merchant_id + CARD
+    fun cardPay(merchant_id: String): String {
+        return "${BASE_URL}v1/merchant/${merchant_id}${CARD}"
     }
-    fun CARD_MERCHANT(merchant_id: String): String {
-        return BASE_URL + "v1/merchant/" + merchant_id + CARDSTORAGE
+
+    fun cardMerchant(merchant_id: String): String {
+        return "${BASE_URL}v1/merchant/${merchant_id}${CARDSTORAGE}"
     }
 }
 
@@ -60,7 +61,7 @@ object Params {
     const val CURRENCY = "pg_currency"
     const val LIFETIME = "pg_lifetime"
     const val ENCODING = "pg_encoding"
-    const val RECURRING_LIFETIME= "pg_recurring_lifetime"
+    const val RECURRING_LIFETIME = "pg_recurring_lifetime"
     const val PAYMENT_SYSTEM = "pg_payment_system"
     const val SUCCESS_METHOD = "pg_success_url_method"
     const val FAILURE_METHOD = "pg_failure_url_method"
