@@ -1,18 +1,21 @@
 package money.paybox.payboxsdk
 
-import money.paybox.payboxsdk.api.Signing
 import money.paybox.payboxsdk.api.ApiHelper
 import money.paybox.payboxsdk.api.Params
+import money.paybox.payboxsdk.api.Signing
 import money.paybox.payboxsdk.api.Urls
 import money.paybox.payboxsdk.config.ConfigurationImp
 import money.paybox.payboxsdk.interfaces.ApiListener
 import money.paybox.payboxsdk.interfaces.Configuration
 import money.paybox.payboxsdk.interfaces.PayboxSdkInterface
-import money.paybox.payboxsdk.models.*
+import money.paybox.payboxsdk.models.Capture
+import money.paybox.payboxsdk.models.Card
+import money.paybox.payboxsdk.models.Error
+import money.paybox.payboxsdk.models.Payment
+import money.paybox.payboxsdk.models.RecurringPayment
+import money.paybox.payboxsdk.models.Status
 import money.paybox.payboxsdk.view.PaymentView
 import java.lang.ref.WeakReference
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
 
@@ -30,7 +33,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
     private var cardRemovedReference: ((card: Card?, error: Error?) -> Unit)? = null
     private var recurringPaidReference: ((recurringPayment: RecurringPayment?, error: Error?) -> Unit)? =
         null
-    private var nonAcceptancePaidReference: ((payment: Payment?, error: Error?)->Unit)? = null
+    private var nonAcceptancePaidReference: ((payment: Payment?, error: Error?) -> Unit)? = null
     override lateinit var secretKey: String
 
     private constructor(merchantId: Int, secretKey: String) : this() {
@@ -104,10 +107,13 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         val params: HashMap<String, String> = hashMapOf()
         params[Params.MERCHANT_ID] = merchantId.toString()
         params[Params.PAYMENT_ID] = paymentId.toString()
-        helper.initConnection(Urls.NONACCEPTANCE_DIRECT(merchantId.toString()), params)
+        helper.initConnection(Urls.nonAcceptanceDirect(merchantId.toString()), params)
     }
 
-    override fun getPaymentStatus(paymentId: Int, status: (status: Status?, error: Error?) -> Unit) {
+    override fun getPaymentStatus(
+        paymentId: Int,
+        status: (status: Status?, error: Error?) -> Unit
+    ) {
         this.statusReference = status
         val params = configs.getParams()
         params[Params.PAYMENT_ID] = paymentId.toString()
@@ -256,7 +262,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         params[Params.CARD_TOKEN] = cardToken
 
         helper.initConnection(
-            Urls.CARD_PAY(configs.merchantId.toString()) + Urls.CARDINITPAY,
+            Urls.cardPay(configs.merchantId.toString()) + Urls.CARDINITPAY,
             params
         )
     }

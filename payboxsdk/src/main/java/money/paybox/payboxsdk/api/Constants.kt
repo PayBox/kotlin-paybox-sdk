@@ -21,6 +21,7 @@ object Urls {
     const val ADDCARD_URL = "add"
     const val PAY = "pay"
     const val REMOVECARD_URL = "remove"
+    const val DIRECT = "direct"
     fun cardPay(merchant_id: String): String {
         return "${BASE_URL}v1/merchant/${merchant_id}${CARD}"
     }
@@ -28,7 +29,8 @@ object Urls {
     fun cardMerchant(merchant_id: String): String {
         return "${BASE_URL}v1/merchant/${merchant_id}${CARDSTORAGE}"
     }
-    fun NONACCEPTANCE_DIRECT(merchant_id: String): String {
+
+    fun nonAcceptanceDirect(merchant_id: String): String {
         return FREEDOM_BASE_URL + "v1/merchant/" + merchant_id + CARD + DIRECT
     }
 }
