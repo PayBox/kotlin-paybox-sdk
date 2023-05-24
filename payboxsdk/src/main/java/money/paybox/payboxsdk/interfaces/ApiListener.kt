@@ -14,4 +14,5 @@ interface ApiListener {
     fun onCardListing(cards: ArrayList<Card>?, error: Error?)
     fun onCardRemoved(card: Card?, error: Error?)
     fun onCardPayInited(payment: Payment?, error: Error?)
+    fun onNonAcceptanceDirected(payment: Payment?, error: Error?)
 }

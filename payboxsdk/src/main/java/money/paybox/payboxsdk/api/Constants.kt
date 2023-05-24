@@ -3,6 +3,7 @@ package money.paybox.payboxsdk.api
 object Urls {
     const val BASE_URL = "https://api.paybox.money/"
     const val CUSTOMER_URL = "https://customer.paybox.money"
+    const val FREEDOM_BASE_URL = "https://api.freedompay.money/"
     const val STATUS_URL = "${BASE_URL}get_status.php"
     const val INIT_PAYMENT_URL = "${BASE_URL}init_payment.php"
     const val REVOKE_URL = "${BASE_URL}revoke.php"
@@ -26,6 +27,9 @@ object Urls {
 
     fun cardMerchant(merchant_id: String): String {
         return "${BASE_URL}v1/merchant/${merchant_id}${CARDSTORAGE}"
+    }
+    fun NONACCEPTANCE_DIRECT(merchant_id: String): String {
+        return FREEDOM_BASE_URL + "v1/merchant/" + merchant_id + CARD + DIRECT
     }
 }
 
@@ -90,4 +94,5 @@ object Params {
     const val NONE = "NONE"
     const val FRAME = "frame"
     const val GET = "GET"
+    const val CARD_TOKEN = "pg_card_token"
 }

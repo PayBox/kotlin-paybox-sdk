@@ -67,10 +67,38 @@ interface PayboxSdkInterface {
      * @param extraParams доп. параметры мерчанта
      * @param payCreated callback от Api Paybox
      */
+    @Deprecated(
+        "This method has deprecated cardId parameter. Use createCardPayment method with cardToken parameter",
+        ReplaceWith(
+            "this.createCardPayment(amount, userId, cardToken, description, orderId, extraParams, payCreated)",
+            "money.paybox.payboxsdk.interfaces"
+        ), DeprecationLevel.WARNING
+    )
     fun createCardPayment(
         amount: Float,
         userId: String,
         cardId: Int,
+        description: String,
+        orderId: String,
+        extraParams: HashMap<String, String>? = null,
+        payCreated: (payment: Payment?, error: Error?) -> Unit
+    )
+
+    /**
+     * Создание платежа добавленной картой
+     * @return
+     * @param amount сумма платежа
+     * @param description комментарии, описание платежа
+     * @param orderId ID заказа платежа
+     * @param userId ID пользователя в системе мерчанта
+     * @param cardToken Token сохраненной карты в системе Paybox
+     * @param extraParams доп. параметры мерчанта
+     * @param payCreated callback от Api Paybox
+     */
+    fun createCardPayment(
+        amount: Float,
+        userId: String,
+        cardToken: String,
         description: String,
         orderId: String,
         extraParams: HashMap<String, String>? = null,
@@ -162,4 +190,13 @@ interface PayboxSdkInterface {
      * @return
      */
     fun config(): Configuration
+
+    /**
+     * Проведение безакцептного списания
+     * @return
+     * @param paymentId ID платежа в системе Paybox
+     * @param merchantId ID мерчанта в системе Paybox
+     * @param paymentPaid callback от Api Paybox
+     */
+    fun createNonAcceptancePayment(paymentId: Int?, merchantId: Int?, paymentPaid: (payment: Payment?, error: Error?)->Unit)
 }
