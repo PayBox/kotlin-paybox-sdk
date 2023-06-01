@@ -65,6 +65,14 @@ abstract class BaseApi : Signing() {
                 }
                 br.close()
                 inputStream.close()
+            } else {
+                val inputStream = connection.errorStream
+                val br = BufferedReader(InputStreamReader(inputStream))
+                br.readLines().forEach {
+                    line += it
+                }
+                br.close()
+                inputStream.close()
             }
             return ResponseData(statusCode, line, requestData.url)
         } catch (e: Exception) {
@@ -178,13 +186,7 @@ abstract class BaseApi : Signing() {
                         if (json.optResponse(Params.STATUS) != Params.ERROR) {
                             apiHandler(it.url, json, null)
                         } else {
-                            val code = json.optResponse(Params.ERROR_CODE)
-                            val description = json.optResponse(Params.ERROR_DESCRIPTION)
-                            apiHandler(
-                                it.url, null, Error(
-                                    code?.toInt() ?: 520, description ?: Params.UNKNOWN_ERROR
-                                )
-                            )
+                            handleError(json, it.url)
                         }
                     } catch (e: Exception) {
                         apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR))
@@ -193,10 +195,24 @@ abstract class BaseApi : Signing() {
                     apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR))
                 }
             } else {
-                apiHandler(it.url, null, Error(it.code, it.response))
+                if (it.response.contains(Params.RESPONSE)) {
+                    val json = XML.toJSONObject(it.response, true)
+                    handleError(json, it.url)
+                } else {
+                    apiHandler(it.url, null, Error(it.code, it.response))
+                }
             }
         }
+    }
 
+    private fun handleError(json: JSONObject, url: String) {
+        val code = json.optResponse(Params.ERROR_CODE)
+        val description = json.optResponse(Params.ERROR_DESCRIPTION)
+        apiHandler(
+            url, null, Error(
+                code?.toInt() ?: 520, description ?: Params.UNKNOWN_ERROR
+            )
+        )
     }
 
     private fun apiHandler(url: String, json: JSONObject?, error: Error?) {
@@ -204,33 +220,43 @@ abstract class BaseApi : Signing() {
             url.contains(Urls.INIT_PAYMENT_URL) -> {
                 this.listener.onPaymentInited(json?.getPayment(), error)
             }
+
             url.contains(Urls.REVOKE_URL) -> {
                 this.listener.onPaymentRevoked(json?.getPayment(), error)
             }
+
             url.contains(Urls.CANCEL_URL) -> {
                 this.listener.onPaymentCanceled(json?.getPayment(), error)
             }
+
             url.contains(Urls.CLEARING_URL) -> {
                 this.listener.onCapture(json?.getCapture(), error)
             }
+
             url.contains(Urls.STATUS_URL) -> {
                 this.listener.onPaymentStatus(json?.getStatus(), error)
             }
+
             url.contains(Urls.RECURRING_URL) -> {
                 this.listener.onPaymentRecurring(json?.getRecurringPayment(), error)
             }
+
             url.contains(Urls.CARDSTORAGE + Urls.ADDCARD_URL) -> {
                 this.listener.onCardAdding(json?.getPayment(), error)
             }
+
             url.contains(Urls.CARDSTORAGE + Urls.LISTCARD_URL) -> {
                 this.listener.onCardListing(json?.getCards(), error)
             }
+
             url.contains(Urls.CARDSTORAGE + Urls.REMOVECARD_URL) -> {
                 this.listener.onCardRemoved(json?.getCards()?.get(0), error)
             }
+
             url.contains(Urls.CARD + Urls.CARDINITPAY) -> {
                 this.listener.onCardPayInited(json?.getPayment(), error)
             }
+
             url.contains(Urls.CARD + Urls.DIRECT) -> {
                 this.listener.onNonAcceptanceDirected(json?.getPayment(), error)
             }
