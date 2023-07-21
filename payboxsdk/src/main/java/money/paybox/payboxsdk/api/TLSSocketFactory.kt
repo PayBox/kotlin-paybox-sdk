@@ -10,6 +10,11 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
+
+private const val TLS = "TLS"
+private const val TLSv1_1 = "TLSv1.1"
+private const val TLSv1_2 = "TLSv1.2"
+
 class TLSSocketFactory @Throws(KeyManagementException::class, NoSuchAlgorithmException::class)
 
 constructor() : SSLSocketFactory() {
@@ -17,7 +22,7 @@ constructor() : SSLSocketFactory() {
     private val internalSSLSocketFactory: SSLSocketFactory
 
     init {
-        val context = SSLContext.getInstance("TLS")
+        val context = SSLContext.getInstance(TLS)
         context.init(null, null, null)
         internalSSLSocketFactory = context.socketFactory
     }
@@ -46,8 +51,20 @@ constructor() : SSLSocketFactory() {
     }
 
     @Throws(IOException::class, UnknownHostException::class)
-    override fun createSocket(host: String, port: Int, localHost: InetAddress, localPort: Int): Socket? {
-        return enableTLSOnSocket(internalSSLSocketFactory.createSocket(host, port, localHost, localPort))
+    override fun createSocket(
+        host: String,
+        port: Int,
+        localHost: InetAddress,
+        localPort: Int
+    ): Socket? {
+        return enableTLSOnSocket(
+            internalSSLSocketFactory.createSocket(
+                host,
+                port,
+                localHost,
+                localPort
+            )
+        )
     }
 
     @Throws(IOException::class)
@@ -56,13 +73,25 @@ constructor() : SSLSocketFactory() {
     }
 
     @Throws(IOException::class)
-    override fun createSocket(address: InetAddress, port: Int, localAddress: InetAddress, localPort: Int): Socket? {
-        return enableTLSOnSocket(internalSSLSocketFactory.createSocket(address, port, localAddress, localPort))
+    override fun createSocket(
+        address: InetAddress,
+        port: Int,
+        localAddress: InetAddress,
+        localPort: Int
+    ): Socket? {
+        return enableTLSOnSocket(
+            internalSSLSocketFactory.createSocket(
+                address,
+                port,
+                localAddress,
+                localPort
+            )
+        )
     }
 
     private fun enableTLSOnSocket(socket: Socket?): Socket? {
         if (socket != null && socket is SSLSocket) {
-            socket.enabledProtocols = arrayOf("TLSv1.1", "TLSv1.2")
+            socket.enabledProtocols = arrayOf(TLSv1_1, TLSv1_2)
         }
         return socket
     }
