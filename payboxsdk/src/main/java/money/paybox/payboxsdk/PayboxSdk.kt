@@ -100,14 +100,13 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
 
     override fun createNonAcceptancePayment(
         paymentId: Int?,
-        merchantId: Int?,
         paymentPaid: (payment: Payment?, error: Error?) -> Unit
     ) {
         this.nonAcceptancePaidReference = paymentPaid
         val params: HashMap<String, String> = hashMapOf()
-        params[Params.MERCHANT_ID] = merchantId.toString()
+        params[Params.MERCHANT_ID] = configs.merchantId.toString()
         params[Params.PAYMENT_ID] = paymentId.toString()
-        helper.initConnection(Urls.nonAcceptanceDirect(merchantId.toString()), params)
+        helper.initConnection(Urls.nonAcceptanceDirect(configs.merchantId.toString()), params)
     }
 
     override fun getPaymentStatus(
