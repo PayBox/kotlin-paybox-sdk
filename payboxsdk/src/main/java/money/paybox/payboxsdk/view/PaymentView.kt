@@ -49,7 +49,7 @@ class PaymentView : FrameLayout {
     }
 
     fun loadPaymentPage(url: String, successOrFailure: (isSuccess: Boolean) -> Unit) {
-        if (url.startsWith(Urls.BASE_URL) || url.startsWith(Urls.CUSTOMER_URL)) {
+        if (url.startsWith(Urls.DEFAULT_PAYBOX_URL) || url.startsWith(Urls.CUSTOMER_URL)) {
             this.webView.loadUrl(url)
             this.sOf = successOrFailure
             isFrame = !url.contains(Urls.PAY_HTML)

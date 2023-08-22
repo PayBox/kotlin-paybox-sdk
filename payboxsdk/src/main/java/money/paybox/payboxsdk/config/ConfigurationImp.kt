@@ -2,6 +2,7 @@ package money.paybox.payboxsdk.config
 
 import money.paybox.payboxsdk.api.Params
 import money.paybox.payboxsdk.api.Urls
+import money.paybox.payboxsdk.config.Region.DEFAULT
 import money.paybox.payboxsdk.interfaces.Configuration
 import kotlin.collections.HashMap
 
@@ -24,6 +25,7 @@ class ConfigurationImp(val merchantId: Int) : Configuration {
     private var captureUrl: String? = null
     private var currencyCode: String = "KZT"
     private var isFrameRequired = false
+    private var region: Region = DEFAULT
 
     override fun setUserPhone(userPhone: String) {
         this.userPhone = userPhone
@@ -91,6 +93,11 @@ class ConfigurationImp(val merchantId: Int) : Configuration {
 
     override fun setFrameRequired(isFrameRequired: Boolean) {
         this.isFrameRequired = isFrameRequired
+    }
+
+    override fun setRegion(region: Region) {
+        this.region = region
+        Urls.region = region
     }
 
     private fun Boolean.stringValue(): String = if (this) "1" else "0"

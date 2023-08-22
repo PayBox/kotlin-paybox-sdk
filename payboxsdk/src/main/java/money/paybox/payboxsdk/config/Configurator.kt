@@ -31,3 +31,7 @@ enum class RequestMethod {
 enum class Language {
     ru, en, kz, de
 }
+
+enum class Region {
+    DEFAULT, RU, UZ
+}
