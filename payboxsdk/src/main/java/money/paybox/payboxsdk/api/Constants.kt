@@ -6,11 +6,13 @@ import money.paybox.payboxsdk.config.Region.RU
 import money.paybox.payboxsdk.config.Region.UZ
 
 object Urls {
-    const val DEFAULT_PAYBOX_URL = "https://api.paybox.money/"
-    const val CUSTOMER_URL = "https://customer.paybox.money"
     const val DEFAULT_FREEDOM_URL = "https://api.freedompay.money/"
     const val RU_PAYBOX_URL = "https://api.paybox.ru/"
     const val UZ_FREEDOM_URL = "https://api.freedompay.uz/"
+    const val CUSTOMER_DEFAULT_URL = "https://customer.freedompay.money"
+    const val CUSTOMER_RU_URL = "https://customer.paybox.ru"
+    const val CUSTOMER_UZ_URL = "https://customer.freedompay.uz"
+
 
     const val PAY_HTML = "pay.html"
     const val ABOUT_BLANK = "about:blank"
@@ -27,9 +29,16 @@ object Urls {
 
     fun getBaseUrl(): String =
         when (region) {
-            DEFAULT -> DEFAULT_PAYBOX_URL
+            DEFAULT -> DEFAULT_FREEDOM_URL
             UZ -> UZ_FREEDOM_URL
             RU -> RU_PAYBOX_URL
+        }
+
+    fun getCustomerUrl(): String =
+        when (region) {
+            DEFAULT -> CUSTOMER_DEFAULT_URL
+            UZ -> CUSTOMER_UZ_URL
+            RU -> CUSTOMER_RU_URL
         }
 
     fun statusUrl() = "${getBaseUrl()}get_status.php"
