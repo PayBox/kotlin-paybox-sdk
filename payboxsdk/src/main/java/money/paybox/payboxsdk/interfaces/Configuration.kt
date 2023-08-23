@@ -129,5 +129,10 @@ interface Configuration {
      */
     fun setFrameRequired(isFrameRequired: Boolean)
 
+    /**
+     * Установка региона
+     * @return
+     * @param region Регион
+     */
     fun setRegion(region: Region)
 }

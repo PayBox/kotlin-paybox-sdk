@@ -12,24 +12,6 @@ object Urls {
     const val RU_PAYBOX_URL = "https://api.paybox.ru/"
     const val UZ_FREEDOM_URL = "https://api.freedompay.uz/"
 
-    var region: Region = DEFAULT
-
-    fun getBaseUrl(): String =
-        when (region) {
-            DEFAULT -> DEFAULT_PAYBOX_URL
-            UZ -> UZ_FREEDOM_URL
-            RU -> RU_PAYBOX_URL
-        }
-
-    val STATUS_URL = "${getBaseUrl()}get_status.php"
-    val INIT_PAYMENT_URL = "${getBaseUrl()}init_payment.php"
-    val REVOKE_URL = "${getBaseUrl()}revoke.php"
-    val CANCEL_URL = "${getBaseUrl()}cancel.php"
-    val CLEARING_URL = "${getBaseUrl()}do_capture.php"
-    val RECURRING_URL = "${getBaseUrl()}make_recurring_payment.php"
-    val SUCCESS_URL = "${getBaseUrl()}success"
-    val FAILURE_URL = "${getBaseUrl()}failure"
-
     const val PAY_HTML = "pay.html"
     const val ABOUT_BLANK = "about:blank"
     const val CARDSTORAGE = "/cardstorage/"
@@ -40,6 +22,24 @@ object Urls {
     const val PAY = "pay"
     const val REMOVECARD_URL = "remove"
     const val DIRECT = "direct"
+
+    var region: Region = DEFAULT
+
+    fun getBaseUrl(): String =
+        when (region) {
+            DEFAULT -> DEFAULT_PAYBOX_URL
+            UZ -> UZ_FREEDOM_URL
+            RU -> RU_PAYBOX_URL
+        }
+
+    fun statusUrl() = "${getBaseUrl()}get_status.php"
+    fun initPaymentUrl() = "${getBaseUrl()}init_payment.php"
+    fun revokeUrl() = "${getBaseUrl()}revoke.php"
+    fun cancelUrl() = "${getBaseUrl()}cancel.php"
+    fun clearingUrl() = "${getBaseUrl()}do_capture.php"
+    fun recurringUrl() = "${getBaseUrl()}make_recurring_payment.php"
+    fun successUrl() = "${getBaseUrl()}success"
+    fun failureUrl() = "${getBaseUrl()}failure"
 
     fun cardPay(merchant_id: String): String {
         return "${getBaseUrl()}v1/merchant/${merchant_id}${CARD}"

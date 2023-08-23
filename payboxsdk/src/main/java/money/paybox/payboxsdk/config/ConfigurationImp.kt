@@ -136,10 +136,10 @@ class ConfigurationImp(val merchantId: Int) : Configuration {
             put(Params.TIMEOUT_AFTER_PAYMENT, "0")
             put(Params.SUCCESS_METHOD, Params.GET)
             put(Params.FAILURE_METHOD, Params.GET)
-            put(Params.SUCCESS_URL, Urls.SUCCESS_URL)
-            put(Params.FAILURE_URL, Urls.FAILURE_URL)
-            put(Params.BACK_LINK, Urls.SUCCESS_URL)
-            put(Params.POST_LINK, Urls.SUCCESS_URL)
+            put(Params.SUCCESS_URL, Urls.successUrl())
+            put(Params.FAILURE_URL, Urls.failureUrl())
+            put(Params.BACK_LINK, Urls.successUrl())
+            put(Params.POST_LINK, Urls.successUrl())
             put(Params.LANGUAGE, language.name)
 
             userPhone?.takeIf { it.isNotEmpty() }?.let { put(Params.USER_PHONE, it) }

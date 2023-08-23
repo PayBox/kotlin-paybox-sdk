@@ -217,27 +217,27 @@ abstract class BaseApi : Signing() {
 
     private fun apiHandler(url: String, json: JSONObject?, error: Error?) {
         when {
-            url.contains(Urls.INIT_PAYMENT_URL) -> {
+            url.contains(Urls.initPaymentUrl()) -> {
                 this.listener.onPaymentInited(json?.getPayment(), error)
             }
 
-            url.contains(Urls.REVOKE_URL) -> {
+            url.contains(Urls.revokeUrl()) -> {
                 this.listener.onPaymentRevoked(json?.getPayment(), error)
             }
 
-            url.contains(Urls.CANCEL_URL) -> {
+            url.contains(Urls.cancelUrl()) -> {
                 this.listener.onPaymentCanceled(json?.getPayment(), error)
             }
 
-            url.contains(Urls.CLEARING_URL) -> {
+            url.contains(Urls.clearingUrl()) -> {
                 this.listener.onCapture(json?.getCapture(), error)
             }
 
-            url.contains(Urls.STATUS_URL) -> {
+            url.contains(Urls.statusUrl()) -> {
                 this.listener.onPaymentStatus(json?.getStatus(), error)
             }
 
-            url.contains(Urls.RECURRING_URL) -> {
+            url.contains(Urls.recurringUrl()) -> {
                 this.listener.onPaymentRecurring(json?.getRecurringPayment(), error)
             }
 
