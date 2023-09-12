@@ -195,8 +195,7 @@ interface PayboxSdkInterface {
      * Проведение безакцептного списания
      * @return
      * @param paymentId ID платежа в системе Paybox
-     * @param merchantId ID мерчанта в системе Paybox
      * @param paymentPaid callback от Api Paybox
      */
-    fun createNonAcceptancePayment(paymentId: Int?, merchantId: Int?, paymentPaid: (payment: Payment?, error: Error?)->Unit)
+    fun createNonAcceptancePayment(paymentId: Int?, paymentPaid: (payment: Payment?, error: Error?)->Unit)
 }
