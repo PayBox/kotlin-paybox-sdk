@@ -76,7 +76,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         }
         params[Params.AMOUNT] = amount.toString()
         params[Params.DESCRIPTION] = description
-        helper.initConnection(Urls.INIT_PAYMENT_URL, params)
+        helper.initConnection(Urls.initPaymentUrl(), params)
     }
 
     override fun createRecurringPayment(
@@ -95,7 +95,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         params[Params.AMOUNT] = amount.toString()
         params[Params.DESCRIPTION] = description
         params[Params.RECURRING_PROFILE] = recurringProfile
-        helper.initConnection(Urls.RECURRING_URL, params)
+        helper.initConnection(Urls.recurringUrl(), params)
     }
 
     override fun createNonAcceptancePayment(
@@ -116,7 +116,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         this.statusReference = status
         val params = configs.getParams()
         params[Params.PAYMENT_ID] = paymentId.toString()
-        helper.initConnection(Urls.STATUS_URL, params)
+        helper.initConnection(Urls.statusUrl(), params)
 
     }
 
@@ -129,7 +129,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         val params = configs.getParams()
         params[Params.PAYMENT_ID] = paymentId.toString()
         params[Params.REFUND_AMOUNT] = amount.toString()
-        helper.initConnection(Urls.REVOKE_URL, params)
+        helper.initConnection(Urls.revokeUrl(), params)
     }
 
     override fun makeClearingPayment(
@@ -143,7 +143,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         amount?.let {
             params[Params.CLEARING_AMOUNT] = it.toString()
         }
-        helper.initConnection(Urls.CLEARING_URL, params)
+        helper.initConnection(Urls.clearingUrl(), params)
     }
 
     override fun makeCancelPayment(
@@ -153,7 +153,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         this.canceledReference = canceled
         val params = configs.getParams()
         params[Params.PAYMENT_ID] = paymentId.toString()
-        helper.initConnection(Urls.CANCEL_URL, params)
+        helper.initConnection(Urls.cancelUrl(), params)
     }
 
     override fun addNewCard(

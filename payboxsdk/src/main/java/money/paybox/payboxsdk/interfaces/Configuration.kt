@@ -2,6 +2,7 @@ package money.paybox.payboxsdk.interfaces
 
 import money.paybox.payboxsdk.config.Language
 import money.paybox.payboxsdk.config.PaymentSystem
+import money.paybox.payboxsdk.config.Region
 import money.paybox.payboxsdk.config.RequestMethod
 
 /**
@@ -127,4 +128,11 @@ interface Configuration {
      * @param isFrameRequired значение true если необходимо отображать фрейм вместо платежной страницы
      */
     fun setFrameRequired(isFrameRequired: Boolean)
+
+    /**
+     * Установка региона
+     * @return
+     * @param region Регион
+     */
+    fun setRegion(region: Region)
 }

@@ -49,7 +49,7 @@ class PaymentView : FrameLayout {
     }
 
     fun loadPaymentPage(url: String, successOrFailure: (isSuccess: Boolean) -> Unit) {
-        if (url.startsWith(Urls.BASE_URL) || url.startsWith(Urls.CUSTOMER_URL)) {
+        if (url.startsWith(Urls.getBaseUrl()) || url.startsWith(Urls.getCustomerUrl())) {
             this.webView.loadUrl(url)
             this.sOf = successOrFailure
             isFrame = !url.contains(Urls.PAY_HTML)
@@ -83,7 +83,7 @@ class PaymentView : FrameLayout {
                     return false
                 }
 
-                if (url.startsWith(Urls.SUCCESS_URL) || url.startsWith(Urls.FAILURE_URL)) {
+                if (url.startsWith(Urls.successUrl()) || url.startsWith(Urls.failureUrl())) {
                     callSdk(url)
                     view?.loadUrl(Urls.ABOUT_BLANK)
                 } else view?.loadUrl(url)
@@ -99,7 +99,7 @@ class PaymentView : FrameLayout {
         }
 
         sOf?.let {
-            it(url.startsWith(Urls.SUCCESS_URL))
+            it(url.startsWith(Urls.successUrl()))
         }
     }
 

@@ -2,6 +2,7 @@ package money.paybox.payboxsdk.config
 
 import money.paybox.payboxsdk.api.Params
 import money.paybox.payboxsdk.api.Urls
+import money.paybox.payboxsdk.config.Region.DEFAULT
 import money.paybox.payboxsdk.interfaces.Configuration
 import kotlin.collections.HashMap
 
@@ -24,6 +25,7 @@ class ConfigurationImp(val merchantId: Int) : Configuration {
     private var captureUrl: String? = null
     private var currencyCode: String = "KZT"
     private var isFrameRequired = false
+    private var region: Region = DEFAULT
 
     override fun setUserPhone(userPhone: String) {
         this.userPhone = userPhone
@@ -93,6 +95,11 @@ class ConfigurationImp(val merchantId: Int) : Configuration {
         this.isFrameRequired = isFrameRequired
     }
 
+    override fun setRegion(region: Region) {
+        this.region = region
+        Urls.region = region
+    }
+
     private fun Boolean.stringValue(): String = if (this) "1" else "0"
 
     fun defParams(): HashMap<String, String> {
@@ -129,10 +136,10 @@ class ConfigurationImp(val merchantId: Int) : Configuration {
             put(Params.TIMEOUT_AFTER_PAYMENT, "0")
             put(Params.SUCCESS_METHOD, Params.GET)
             put(Params.FAILURE_METHOD, Params.GET)
-            put(Params.SUCCESS_URL, Urls.SUCCESS_URL)
-            put(Params.FAILURE_URL, Urls.FAILURE_URL)
-            put(Params.BACK_LINK, Urls.SUCCESS_URL)
-            put(Params.POST_LINK, Urls.SUCCESS_URL)
+            put(Params.SUCCESS_URL, Urls.successUrl())
+            put(Params.FAILURE_URL, Urls.failureUrl())
+            put(Params.BACK_LINK, Urls.successUrl())
+            put(Params.POST_LINK, Urls.successUrl())
             put(Params.LANGUAGE, language.name)
 
             userPhone?.takeIf { it.isNotEmpty() }?.let { put(Params.USER_PHONE, it) }
