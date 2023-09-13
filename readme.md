@@ -32,10 +32,10 @@ allprojects {
 }
 ```
 
-2.Добавьте в ваш build.gradle:
+2. Добавьте в ваш build.gradle:
 ```
 dependencies {
-	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.9.11'
+	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.10.0'
 }
 ```
 ---
@@ -79,6 +79,18 @@ dependencies {
 ```
     sdk.config().testMode(enabled)  //По умолчанию тестовый режим включен
 ```
+
+*Выбор региона:*
+```
+    sdk.config().setRegion(Region.DEAFAULT) //Region.DEAFAULT по умолчанию
+```
+Класс `Region` имеет следующие значения:
+
+| Параметр   | Значение                              |
+|------------|---------------------------------------|
+| `DEAFAULT` | Казахстан и другие страны присутствия |
+| `RU`       | Россия                                |
+| `UZ`       | Узбекистан                            |
 
 *Выбор платежной системы:*
 ```
@@ -216,10 +228,11 @@ dependencies {
 
 ## *Создание платежа сохраненой картой:*
 ```
-   sdk.createCardPayment(amount, userId, cardId, "description", "orderId"){
+   sdk.createCardPayment(amount, userId, "cardToken", "description", "orderId"){
             payment, error -> // Вызовется после создания
    }
 ```
+> *Внимание: Метод `createCardPayment` с использованием `cardId` является устаревшим.*
 ## *Для оплаты созданного платежа:*
 ```
    sdk.payByCard(paymentId){
@@ -227,3 +240,10 @@ dependencies {
    }
 ```
 После вызова в paymentView откроется платежная страница для 3ds аутентификации
+
+## *Для оплаты созданного платежа c безакцепным списанием:*
+```
+   sdk.createNonAcceptancePayment(paymentId, merchantId){
+            payment, error -> //Вызовется после оплаты
+   }
+```
