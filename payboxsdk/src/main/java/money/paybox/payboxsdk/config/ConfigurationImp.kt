@@ -121,13 +121,15 @@ class ConfigurationImp(val merchantId: Int) : Configuration {
         params.apply {
             put(Params.MERCHANT_ID, merchantId.toString())
             put(Params.TEST_MODE, testMode.stringValue())
-            put(Params.RECURRING_START, recurringMode.stringValue())
             put(Params.AUTOCLEARING, autoClearing.stringValue())
             put(Params.REQUEST_METHOD, requestMethod.name)
             put(Params.CURRENCY, currencyCode)
             put(Params.LIFETIME, paymentLifetime.toString())
             put(Params.ENCODING, encoding)
-            put(Params.RECURRING_LIFETIME, recurringLifetime.toString())
+            if(recurringMode) {
+                put(Params.RECURRING_START, recurringMode.stringValue())
+                put(Params.RECURRING_LIFETIME, recurringLifetime.toString())
+            }
             put(
                 Params.PAYMENT_SYSTEM,
                 if (paymentSystem.name == Params.NONE) "" else paymentSystem.name
