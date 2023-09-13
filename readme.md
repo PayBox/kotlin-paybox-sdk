@@ -80,6 +80,18 @@ dependencies {
     sdk.config().testMode(enabled)  //По умолчанию тестовый режим включен
 ```
 
+*Выбор региона:*
+```
+    sdk.config().setRegion(Region.DEAFAULT) //Region.DEAFAULT по умолчанию
+```
+Класс `Region` имеет следующие значения:
+
+| Параметр   | Значение                              |
+|------------|---------------------------------------|
+| `DEAFAULT` | Казахстан и другие страны присутствия |
+| `RU`       | Россия                                |
+| `UZ`       | Узбекистан                            |
+
 *Выбор платежной системы:*
 ```
     sdk.config().setPaymentSystem(paymentSystem)
@@ -143,18 +155,6 @@ dependencies {
 ```
     sdk.config().setFrameRequired(true) //false по умолчанию
 ```
-
-*Выбор региона:*
-```
-    sdk.config().setRegion(Region) //Region.DEAFAULT по умолчанию
-```
-Класс `Region` имеет следующие значения:
-
-| Параметр   | Значение   |
-|------------|------------|
-| `DEAFAULT` | Казахстан  |
-| `RU`       | Россия     |
-| `UZ`       | Узбекистан |
 
 ---
 
