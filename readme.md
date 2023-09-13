@@ -155,7 +155,6 @@ dependencies {
 ```
     sdk.config().setFrameRequired(true) //false по умолчанию
 ```
-
 ---
 
 # **Работа с SDK**
