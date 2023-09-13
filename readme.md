@@ -143,6 +143,16 @@ dependencies {
 ```
     sdk.config().setFrameRequired(true) //false по умолчанию
 ```
+
+*Выбор региона:*
+```
+    sdk.config().setRegion(Region) //Region.DEAFAULT по умолчанию
+    
+    Класс Region имеет данные значения:
+    DEAFAULT для Казахстана,
+    RU для России,
+    UZ для Узбекистана
+```
 ---
 
 # **Работа с SDK**
