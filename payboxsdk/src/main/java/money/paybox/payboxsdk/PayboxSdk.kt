@@ -311,8 +311,10 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         }
     }
 
-    override fun onGooglePayInited(payment: Payment?, error: Error?):String {
-        return payment?.redirectUrl.toString()
+    override fun onGooglePayInited(payment: Payment?, error: Error?) {
+        paymentPaidReference?.let {
+            it(payment,error)
+        }
     }
 
     override fun onPaymentRevoked(payment: Payment?, error: Error?) {
