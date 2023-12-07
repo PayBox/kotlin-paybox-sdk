@@ -58,6 +58,27 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         this.paymentView = WeakReference(paymentView)
     }
 
+    override fun createGooglePayment(
+        amount: Float,
+        description: String,
+        orderId: String?,
+        userId: String?,
+        extraParams: HashMap<String, String>?,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    ) {
+        this.paymentPaidReference = paymentPaid
+        val params = configs.getParams(extraParams)
+        orderId?.let {
+            params[Params.ORDER_ID] = it
+        }
+        userId?.let {
+            params[Params.USER_ID] = userId
+        }
+        params[Params.AMOUNT] = amount.toString()
+        params[Params.DESCRIPTION] = description
+        helper.initConnection(Urls.initPaymentUrl(), params)
+    }
+
     override fun createPayment(
         amount: Float,
         description: String,
