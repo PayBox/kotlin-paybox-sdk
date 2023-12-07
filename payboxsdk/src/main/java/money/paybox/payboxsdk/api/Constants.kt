@@ -124,5 +124,6 @@ object Params {
     const val NONE = "NONE"
     const val FRAME = "frame"
     const val GET = "GET"
+    const val GOOGLE_PAY = "google_pay"
     const val CARD_TOKEN = "pg_card_token"
 }
