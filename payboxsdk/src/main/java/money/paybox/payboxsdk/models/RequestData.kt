@@ -7,5 +7,5 @@ data class RequestData(
     val params: SortedMap<String, String>,
     val method: RequestMethod,
     val url: String,
-    val paymentType:String?=null
+    val paymentType: String? = null
 )

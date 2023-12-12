@@ -76,7 +76,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         }
         params[Params.AMOUNT] = amount.toString()
         params[Params.DESCRIPTION] = description
-        helper.initConnection(Urls.initPaymentUrl(), params,Params.GOOGLE_PAY)
+        helper.initConnection(Urls.initPaymentUrl(), params, Params.GOOGLE_PAY)
     }
 
     override fun createPayment(
@@ -313,7 +313,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
 
     override fun onGooglePayInited(payment: Payment?, error: Error?) {
         paymentPaidReference?.let {
-            it(payment,error)
+            it(payment, error)
         }
     }
 
