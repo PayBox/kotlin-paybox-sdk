@@ -61,6 +61,49 @@ object Urls {
     fun nonAcceptanceDirect(merchant_id: String): String {
         return "${DEFAULT_FREEDOM_URL}v1/merchant/${merchant_id}${CARD}${DIRECT}"
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 object Params {
