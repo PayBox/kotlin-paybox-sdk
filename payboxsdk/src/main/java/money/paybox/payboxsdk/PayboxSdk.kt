@@ -79,7 +79,8 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         helper.initConnection(Urls.initPaymentUrl(), params, Params.GOOGLE_PAY)
     }
 
-    override fun confirmGooglePayment(url: String, token: String) {
+    override fun confirmGooglePayment(url: String, token: String,paymentPaid: (payment: Payment?, error: Error?) -> Unit) {
+        this.paymentPaidReference = paymentPaid
         val params = HashMap<String,String>()
         params[Params.TYPE] = Params.GOOGLE_PAY
         params[Params.PAYMENTSYSTEM] = "WAY4"

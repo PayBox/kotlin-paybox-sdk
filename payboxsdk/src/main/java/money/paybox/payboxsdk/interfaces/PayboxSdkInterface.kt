@@ -213,6 +213,7 @@ interface PayboxSdkInterface {
 
     fun confirmGooglePayment(
         url: String,
-        token: String
+        token: String,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
     )
 }
