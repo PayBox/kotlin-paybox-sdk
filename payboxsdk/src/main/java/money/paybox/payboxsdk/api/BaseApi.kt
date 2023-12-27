@@ -269,6 +269,9 @@ abstract class BaseApi : Signing() {
             url.contains(Urls.CARD + Urls.DIRECT) -> {
                 this.listener.onNonAcceptanceDirected(json?.getPayment(), error)
             }
+            url.contains(Urls.getCustomerUrl()) -> {
+                this.listener.onGooglePayInited(json?.getPayment(), error)
+            }
         }
     }
 }
