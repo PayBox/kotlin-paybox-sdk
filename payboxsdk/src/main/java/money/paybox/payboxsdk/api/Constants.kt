@@ -129,4 +129,5 @@ object Params {
     const val TYPE = "type"
     const val PAYMENTSYSTEM = "paymentSystem"
     const val TOKEN = "token"
+    const val WAY4 = "WAY4"
 }
