@@ -5,6 +5,7 @@ import money.paybox.payboxsdk.api.Params
 import money.paybox.payboxsdk.api.Signing
 import money.paybox.payboxsdk.api.Urls
 import money.paybox.payboxsdk.config.ConfigurationImp
+import money.paybox.payboxsdk.config.PaymentSystem
 import money.paybox.payboxsdk.interfaces.ApiListener
 import money.paybox.payboxsdk.interfaces.Configuration
 import money.paybox.payboxsdk.interfaces.PayboxSdkInterface
@@ -83,7 +84,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         this.paymentPaidReference = paymentPaid
         val params = HashMap<String,String>()
         params[Params.TYPE] = Params.GOOGLE_PAY
-        params[Params.PAYMENTSYSTEM] = "WAY4"
+        params[Params.PAYMENTSYSTEM] = PaymentSystem.WAY4.name
         params[Params.TOKEN] = token
         helper.initConnection(url, params, Params.GOOGLE_PAY)
     }
