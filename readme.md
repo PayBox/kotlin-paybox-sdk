@@ -294,13 +294,13 @@ dependencies {
 
 # Интеграция Google Pay
 
-1. Добавьте в ваш build.gradle:
+1. Добавьте в ваш `build.gradle:`
 
 ```
    implementation 'com.google.android.gms:play-services-wallet:19.2.1'
 ```
 
-2. Далее следует обновить AndroidManifest:
+2. Далее следует обновить `AndroidManifest:`
 
  ```
     <application>
@@ -313,7 +313,7 @@ dependencies {
  	
 ```
 
-3. Добавьте PayButton в ваше activity:
+3. Добавьте PayButton в ваше xml:
 
  ```
  	 <com.google.android.gms.wallet.button.PayButton
@@ -322,10 +322,8 @@ dependencies {
         android:layout_height="wrap_content"
         />
 ```
-
-4. Инициализация кнопки для оплаты с Google Pay (PayButton):
-
-```
+### 4. Инициализация кнопки для оплаты с Google Pay `PayButton`:
+``` kotlin 
       val googlePayButton: PayButton = findViewById(R.id.buttonPaymentByGoogle)
          googlePayButton.initialize(
             ButtonOptions.newBuilder()
@@ -335,9 +333,9 @@ dependencies {
         )
 ```
 
-5. Инициализация PaymentsClient:
+### 5. Инициализация `PaymentsClient:`
 
-```
+``` kotlin
 	 val googlePaymentsClient = Wallet.getPaymentsClient(
             this,
             Wallet.WalletOptions.Builder()
@@ -345,16 +343,23 @@ dependencies {
                 .setTheme(WalletConstants.THEME_LIGHT)
                 .build()
         )
-    
 ```
 
-6. Создание платежа с использованием Google Pay:
+- Подробнее: `Wallet.getPaymentsClient`- метод, для получения экземпляра PaymentsClient.
 
-```  
+| Параметр                 | Значение       |
+|--------------------------|----------------|
+| `ENVIRONMENT_PRODUCTION` | боевая среда   |
+| `ENVIRONMENT_TEST`       | тестовая среда |
+| `THEME_LIGHT`            | светлая тема   |
+
+### 6. Создание платежа с использованием Google Pay:
+
+```  kotlin
      //Повесим на кнопку обработчик нажатий
      googlePayButton.setOnClickListener {
      
-     *Создание платежа с использованием Google Pay::*
+     *Создание платежа с использованием Google Pay:*
      sdk.createGooglePayment(amount, userId, "cardToken", "description", "orderId")
      { payment, error -> // Вызывается после создания
        //Получаем url для подтверждения платежа
@@ -375,20 +380,26 @@ dependencies {
 	
 ```
 
-7. Создает и возвращает запрос [PaymentDataRequest] для использования с Google Pay API. @return
-   Экземпляр [PaymentDataRequest], настроенный для запроса платежных данных.:
+- Подробнее:
+    `sdk.createGooglePayment`— cоздание платежа с использованием Google Pay
+    `createPaymentDataRequest()` — метод, который возвращает объект PaymentDataRequest. Этот объект
+    определяет параметры и требования для запроса данных платежа, таких как методы оплаты, адрес
+    доставки и др. (ниже приведен код)
+    `loadPaymentData()` — инициирует асинхронную задачу для загрузки данных платежа с использованием
+    предоставленного запроса.
+    `AutoResolveHelper.resolveTask<PaymentData>()`— метод, используется для обработки задачи
+    загрузки данных платежа.
+    `REQUEST_CODE`— код запроса, который будет использоваться для идентификации результата задачи в
+    методе onActivityResult.
 
-```
+*
+
+### 7. Метод `createPaymentDataRequest()` — создает и возвращает запрос [PaymentDataRequest] для использования с Google Pay API:
+
+``` kotlin
      private fun createPaymentDataRequest(): PaymentDataRequest {
     // Создание нового строителя запроса
     val request = PaymentDataRequest.newBuilder()
-    
-        // Установка требований к номеру телефона (в данном случае - не требуется)
-        .setPhoneNumberRequired(false)
-        
-        // Установка требований к адресу электронной почты (в данном случае - требуется)
-        .setEmailRequired(true)
-        
         // Установка информации о транзакции
         .setTransactionInfo(
             TransactionInfo.newBuilder()
@@ -440,27 +451,41 @@ dependencies {
 	
 ```
 
+- Подробнее:
+    `PaymentDataRequest.newBuilder()`: Создает новый строитель запроса данных платежа.
+    `setTransactionInfo()`: Устанавливает информацию о транзакции, такую как общая сумма платежа и
+    код валюты.
+    `PaymentMethodTokenizationParameters.newBuilder()`: Создает строитель параметров токенизации
+    метода оплаты.
+    `setPaymentMethodTokenizationType()`: Устанавливает тип токенизации (в данном случае - платежный
+    шлюз).
+    `addParameter()`: Добавляет параметры для платежного шлюза, такие как "gateway" и "
+    gatewayMerchantId".
+    `setPaymentMethodTokenizationParameters()`: Устанавливает параметры токенизации в запрос данных
+    платежа.
+
+
 8. Получаем результат в onActivityResult():
 
-```
+``` kotlin
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                       е if (data == null)
+                       if (data == null)
                             return
                         val paymentData = PaymentData.getFromIntent(data)
                         val token = paymentData?.paymentMethodToken?.token ?: return
                         // После получения токена мы подтврждаем платеж, отправляя запрос на ранее полученный URL.
-                        sdk.confirmGooglePayment(url, token) { payment, error -> }
+                        sdk.confirmGooglePayment(url, token)
                     }
                     AutoResolveHelper.RESULT_ERROR -> {
                         if (data == null)
                             return
                         val status = AutoResolveHelper.getStatusFromIntent(data)
-                        Log.e("GOOGLE PAY", "Load payment data has failed with status: $status")
+                      
                     }
                     else -> {}
                 }
@@ -470,9 +495,19 @@ dependencies {
     }
 ```
 
+- Подробнее:
+    `onActivityResult` — используется для обработки результатов, возвращаемых активностью интеграции
+    с Google Pay.
+    `data` (Intent)— объект , содержащий данные, возвращенные активностью.
+    `Activity.RESULT_OK` - это константа, указывает на успешное завершение операции
+    `AutoResolveHelper.RESULT_ERROR` - это константа,используемая для указания, что произошла ошибка
+    при разрешении запроса.
+
+*
+
 9. Подтверждение платеж:
 
-``` 
+``` kotlin
  sdk.confirmGooglePayment(url, token) { payment, error -> }
 
 ```
