@@ -7,9 +7,9 @@ import kotlin.collections.HashMap
 
 class ApiHelper(override val listener: ApiListener, override var secretKey: String) : BaseApi() {
 
-    fun initConnection(url: String, params: HashMap<String, String>) {
+    fun initConnection(url: String, params: HashMap<String, String>, paymentType: String? = null) {
         request {
-            RequestData(params.signedParams(url), RequestMethod.POST, url)
+            RequestData(params.signedParams(url), RequestMethod.POST, url, paymentType)
         }
     }
 }

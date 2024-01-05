@@ -5,10 +5,10 @@ import android.os.AsyncTask
 import money.paybox.payboxsdk.interfaces.ApiListener
 import money.paybox.payboxsdk.models.*
 import org.json.JSONObject
-import org.json.XML
 import java.io.*
 import java.net.ConnectException
 import java.net.URL
+import org.json.XML
 import java.net.URLEncoder
 import java.net.UnknownHostException
 import java.util.*
@@ -30,7 +30,7 @@ abstract class BaseApi : Signing() {
             }
 
             override fun onPostExecute(result: ResponseData?) {
-                resolveResponse(result)
+                resolveResponse(result, requestData().paymentType)
             }
         }.execute()
     }
@@ -177,29 +177,29 @@ abstract class BaseApi : Signing() {
         )
     }
 
-    fun resolveResponse(responseData: ResponseData?) {
+    fun resolveResponse(responseData: ResponseData?, paymentType: String? = null) {
         responseData?.let {
             if (!it.error) {
                 if (it.response.contains(Params.RESPONSE)) {
                     try {
                         val json = XML.toJSONObject(it.response, true)
                         if (json.optResponse(Params.STATUS) != Params.ERROR) {
-                            apiHandler(it.url, json, null)
+                            apiHandler(it.url, json, null, paymentType)
                         } else {
                             handleError(json, it.url)
                         }
                     } catch (e: Exception) {
-                        apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR))
+                        apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
                     }
                 } else {
-                    apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR))
+                    apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
                 }
             } else {
                 if (it.response.contains(Params.RESPONSE)) {
                     val json = XML.toJSONObject(it.response, true)
                     handleError(json, it.url)
                 } else {
-                    apiHandler(it.url, null, Error(it.code, it.response))
+                    apiHandler(it.url, null, Error(it.code, it.response), paymentType)
                 }
             }
         }
@@ -215,10 +215,19 @@ abstract class BaseApi : Signing() {
         )
     }
 
-    private fun apiHandler(url: String, json: JSONObject?, error: Error?) {
+    private fun apiHandler(
+        url: String,
+        json: JSONObject?,
+        error: Error?,
+        paymentType: String? = null
+    ) {
         when {
             url.contains(Urls.initPaymentUrl()) -> {
-                this.listener.onPaymentInited(json?.getPayment(), error)
+                if (paymentType == Params.GOOGLE_PAY) {
+                    this.listener.onGooglePayInited(json?.getPayment(), error)
+                } else {
+                    this.listener.onPaymentInited(json?.getPayment(), error)
+                }
             }
 
             url.contains(Urls.revokeUrl()) -> {
@@ -259,6 +268,9 @@ abstract class BaseApi : Signing() {
 
             url.contains(Urls.CARD + Urls.DIRECT) -> {
                 this.listener.onNonAcceptanceDirected(json?.getPayment(), error)
+            }
+            url.contains(Urls.getCustomerUrl()) -> {
+                this.listener.onGooglePayInited(json?.getPayment(), error)
             }
         }
     }

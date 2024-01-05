@@ -197,5 +197,23 @@ interface PayboxSdkInterface {
      * @param paymentId ID платежа в системе Paybox
      * @param paymentPaid callback от Api Paybox
      */
-    fun createNonAcceptancePayment(paymentId: Int?, paymentPaid: (payment: Payment?, error: Error?)->Unit)
+    fun createNonAcceptancePayment(
+        paymentId: Int?,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    )
+
+    fun createGooglePayment(
+        amount: Float,
+        description: String,
+        orderId: String?,
+        userId: String?,
+        extraParams: HashMap<String, String>?,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    )
+
+    fun confirmGooglePayment(
+        url: String,
+        token: String,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    )
 }

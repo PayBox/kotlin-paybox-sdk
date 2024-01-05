@@ -21,7 +21,8 @@ enum class PaymentSystem {
     EPAYKZT,
     KASSA24,
     P2PKKB,
-    EPAYWEBKZT
+    EPAYWEBKZT,
+    WAY4
 }
 
 enum class RequestMethod {

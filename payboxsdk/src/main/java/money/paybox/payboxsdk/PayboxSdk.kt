@@ -5,6 +5,7 @@ import money.paybox.payboxsdk.api.Params
 import money.paybox.payboxsdk.api.Signing
 import money.paybox.payboxsdk.api.Urls
 import money.paybox.payboxsdk.config.ConfigurationImp
+import money.paybox.payboxsdk.config.PaymentSystem
 import money.paybox.payboxsdk.interfaces.ApiListener
 import money.paybox.payboxsdk.interfaces.Configuration
 import money.paybox.payboxsdk.interfaces.PayboxSdkInterface
@@ -56,6 +57,36 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
 
     override fun setPaymentView(paymentView: PaymentView) {
         this.paymentView = WeakReference(paymentView)
+    }
+
+    override fun createGooglePayment(
+        amount: Float,
+        description: String,
+        orderId: String?,
+        userId: String?,
+        extraParams: HashMap<String, String>?,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    ) {
+        this.paymentPaidReference = paymentPaid
+        val params = configs.getParams(extraParams)
+        orderId?.let {
+            params[Params.ORDER_ID] = it
+        }
+        userId?.let {
+            params[Params.USER_ID] = userId
+        }
+        params[Params.AMOUNT] = amount.toString()
+        params[Params.DESCRIPTION] = description
+        helper.initConnection(Urls.initPaymentUrl(), params, Params.GOOGLE_PAY)
+    }
+
+    override fun confirmGooglePayment(url: String, token: String,paymentPaid: (payment: Payment?, error: Error?) -> Unit) {
+        this.paymentPaidReference = paymentPaid
+        val params = HashMap<String,String>()
+        params[Params.TYPE] = Params.GOOGLE_PAY
+        params[Params.PAYMENTSYSTEM] = PaymentSystem.WAY4.name
+        params[Params.TOKEN] = token
+        helper.initConnection(url, params, Params.GOOGLE_PAY)
     }
 
     override fun createPayment(
@@ -287,6 +318,12 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
             paymentPaidReference?.let {
                 it(null, error)
             }
+        }
+    }
+
+    override fun onGooglePayInited(payment: Payment?, error: Error?) {
+        paymentPaidReference?.let {
+            it(payment, error)
         }
     }
 
