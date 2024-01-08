@@ -349,6 +349,8 @@ dependencies {
 
 - Подробнее: `Wallet.getPaymentsClient`- метод, для получения экземпляра PaymentsClient.
 
+### Параметры запросов
+
 | Параметр                 | Значение       |
 |--------------------------|----------------|
 | `ENVIRONMENT_PRODUCTION` | боевая среда   |
@@ -399,9 +401,8 @@ dependencies {
   - `REQUEST_CODE`— код запроса, который будет использоваться для идентификации результата задачи в
     методе onActivityResult.
 
-*
 
-### 7. Метод `createPaymentDataRequest()` — создает и возвращает запрос [PaymentDataRequest] для использования с Google Pay API:
+### 7. Метод `createPaymentDataRequest()` — создает и возвращает запрос `PaymentDataRequest` для использования с Google Pay API:
 
 ``` kotlin
      private fun createPaymentDataRequest(): PaymentDataRequest {
@@ -471,8 +472,8 @@ dependencies {
       платежный
       шлюз).
 
-    - `addParameter()`- добавляет параметры для платежного шлюза, такие как "gateway" и "
-      gatewayMerchantId".
+    - `addParameter()`- добавляет параметры для платежного шлюза, такие как "gateway" и
+      "gatewayMerchantId".
 
     - `setPaymentMethodTokenizationParameters()`- устанавливает параметры токенизации в запрос
       данных платежа.
@@ -508,18 +509,17 @@ dependencies {
 ```
 
 - Подробнее:
-    - `onActivityResult` — используется для обработки результатов, возвращаемых активностью
+    - `onActivityResult` - используется для обработки результатов, возвращаемых активностью
       интеграции
       с Google Pay.
 
-    - `data` (Intent)— объект , содержащий данные, возвращенные активностью.
+    - `data` - объект , содержащий данные, возвращенные активностью.
 
     - `Activity.RESULT_OK` - это константа, указывает на успешное завершение операции
    
     - `AutoResolveHelper.RESULT_ERROR` - это константа,используемая для указания, что произошла ошибка
       при разрешении запроса.
 
-*
 
 9. Подтверждение платеж:
 
