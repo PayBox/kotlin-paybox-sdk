@@ -294,13 +294,13 @@ dependencies {
 
 # Интеграция Google Pay
 
-1. Добавьте в ваш `build.gradle:`
+### 1. Добавьте в ваш `build.gradle:`
 
 ``` groovy
    implementation 'com.google.android.gms:play-services-wallet:19.2.1'
 ```
 
-2. Далее следует обновить `AndroidManifest:`
+### 2. Далее следует обновить `AndroidManifest:`
 
  ``` manifest
     <application>
@@ -313,7 +313,7 @@ dependencies {
  	
 ```
 
-3. Добавьте PayButton в ваше xml:
+### 3. Добавьте PayButton в ваше xml:
 
  ``` xml
  <com.google.android.gms.wallet.button.PayButton
@@ -323,7 +323,7 @@ dependencies {
         />
 ```
 
-## *4. Инициализация кнопки для оплаты с Google Pay `PayButton`:*
+## 4. Инициализация кнопки для оплаты с Google Pay `PayButton`:
 
 ``` kotlin 
       val googlePayButton: PayButton = findViewById(R.id.buttonPaymentByGoogle)
@@ -349,7 +349,7 @@ dependencies {
 
 - Подробнее: `Wallet.getPaymentsClient`- метод, для получения экземпляра PaymentsClient.
 
-### Параметры запросов
+### Параметры методов
 
 | Параметр                 | Значение       |
 |--------------------------|----------------|
@@ -521,7 +521,7 @@ dependencies {
       при разрешении запроса.
 
 
-9. Подтверждение платеж:
+### 9. Подтверждение платеж:
 
 ``` kotlin
  sdk.confirmGooglePayment(url, token) { payment, error -> }
