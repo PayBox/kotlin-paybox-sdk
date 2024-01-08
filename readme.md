@@ -366,8 +366,10 @@ dependencies {
      //Создание платежа с использованием Google Pay
      sdk.createGooglePayment(amount, userId, "cardToken", "description", "orderId")
      { payment, error -> // Вызывается после создания
+     
        //Получаем url для подтверждения платежа
        url = payment?.redirectUrl.toString()
+       
        //Инициирует загрузку данных платежа с использованием Google Pay
        AutoResolveHelper.resolveTask<PaymentData>(
                     googlePaymentsClient.loadPaymentData(createPaymentDataRequest()),
