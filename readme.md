@@ -323,7 +323,7 @@ dependencies {
         />
 ```
 
-## 4. Инициализация кнопки для оплаты с Google Pay `PayButton`:
+### 4. Инициализация кнопки для оплаты с Google Pay `PayButton`:
 
 ``` kotlin 
       val googlePayButton: PayButton = findViewById(R.id.buttonPaymentByGoogle)
@@ -406,15 +406,20 @@ dependencies {
 
 ``` kotlin
      private fun createPaymentDataRequest(): PaymentDataRequest {
+     
     // Создание нового строителя запроса
     val request = PaymentDataRequest.newBuilder()
+    
         // Установка информации о транзакции
         .setTransactionInfo(
             TransactionInfo.newBuilder()
+            
                 // Статус окончательной цены
                 .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
+                
                 // Общая сумма платежа
                 .setTotalPrice("12.00")
+                
                 // Код валюты (например, "KZT")
                 .setCurrencyCode("KZT")
                 .build()
@@ -441,10 +446,12 @@ dependencies {
     
     // Настройка параметров токенизации метода оплаты
     val params = PaymentMethodTokenizationParameters.newBuilder()
+    
         // Тип токенизации (в данном случае - платежный шлюз)
         .setPaymentMethodTokenizationType(
             WalletConstants.PAYMENT_METHOD_TOKENIZATION_TYPE_PAYMENT_GATEWAY
         )
+        
         // Параметры для платежного шлюза (например, "gateway", "gatewayMerchantId")
         .addParameter("gateway", "yourGateway")
         .addParameter("gatewayMerchantId", "yourMerchantIdGivenFromYourGateway")
@@ -491,7 +498,8 @@ dependencies {
                             return
                         val paymentData = PaymentData.getFromIntent(data)
                         val token = paymentData?.paymentMethodToken?.token ?: return
-                        // После получения токена мы подтврждаем платеж, отправляя запрос на ранее полученный URL.
+                        
+                        // После получения токена мы подтверждаем платеж, отправляя запрос на ранее полученный URL.
                         sdk.confirmGooglePayment(url, token)
                     }
                     AutoResolveHelper.RESULT_ERROR -> {
