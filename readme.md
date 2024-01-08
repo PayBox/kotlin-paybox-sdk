@@ -316,7 +316,7 @@ dependencies {
 3. Добавьте PayButton в ваше xml:
 
  ``` xml
- 	 <com.google.android.gms.wallet.button.PayButton
+ <com.google.android.gms.wallet.button.PayButton
         android:id="@+id/buttonPaymentByGoogle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -383,16 +383,21 @@ dependencies {
 ```
 
 - Подробнее:
-  `sdk.createGooglePayment`— cоздание платежа с использованием Google Pay
-  `createPaymentDataRequest()` — метод, который возвращает объект PaymentDataRequest. Этот объект
+
+  - `sdk.createGooglePayment`— cоздание платежа с использованием Google Pay
+  
+  - `createPaymentDataRequest()` — метод, который возвращает объект PaymentDataRequest. Этот объект
   определяет параметры и требования для запроса данных платежа, таких как методы оплаты, адрес
   доставки и др. (ниже приведен код)
-  `loadPaymentData()` — инициирует асинхронную задачу для загрузки данных платежа с использованием
+
+  - `loadPaymentData()` — инициирует асинхронную задачу для загрузки данных платежа с использованием
   предоставленного запроса.
-  `AutoResolveHelper.resolveTask<PaymentData>()`— метод, используется для обработки задачи
+    
+  - `AutoResolveHelper.resolveTask<PaymentData>()`— метод, используется для обработки задачи
   загрузки данных платежа.
-  `REQUEST_CODE`— код запроса, который будет использоваться для идентификации результата задачи в
-  методе onActivityResult.
+      
+  - `REQUEST_CODE`— код запроса, который будет использоваться для идентификации результата задачи в
+    методе onActivityResult.
 
 *
 
@@ -455,6 +460,7 @@ dependencies {
 
 - Подробнее:
     - `PaymentDataRequest.newBuilder()` - создает новый строитель запроса данных платежа.
+  
     - `setTransactionInfo()`- устанавливает информацию о транзакции, такую как общая сумма платежа и
       код валюты.
 
@@ -506,12 +512,12 @@ dependencies {
       интеграции
       с Google Pay.
 
-- `data` (Intent)— объект , содержащий данные, возвращенные активностью.
+    - `data` (Intent)— объект , содержащий данные, возвращенные активностью.
 
     - `Activity.RESULT_OK` - это константа, указывает на успешное завершение операции
    
-- `AutoResolveHelper.RESULT_ERROR` - это константа,используемая для указания, что произошла ошибка
-  при разрешении запроса.
+    - `AutoResolveHelper.RESULT_ERROR` - это константа,используемая для указания, что произошла ошибка
+      при разрешении запроса.
 
 *
 
