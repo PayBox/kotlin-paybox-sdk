@@ -9,7 +9,7 @@ PayBox SDK Android - это библиотека позволяющая упро
 
 <img src="https://github.com/PayBox/sample-android-kotlin-sdk/raw/master/kotlin_init_pay.gif" width="25%" height="25%"/>
 
-**Описание возможностей:**
+### Описание возможностей:
 
 - Инициализация платежа
 - Отмена платежа
@@ -23,10 +23,10 @@ PayBox SDK Android - это библиотека позволяющая упро
 
 # **Установка:**
 
-1. Добавьте репозитории Jitpack в ваш build.gradle на уровне проекта в конец репозиториев
+### 1. Добавьте репозитории Jitpack в ваш build.gradle на уровне проекта в конец репозиториев
    allprojects:
 
-```
+``` groovy
 allprojects {
     repositories {
         // ...
@@ -35,9 +35,9 @@ allprojects {
 }
 ```
 
-2. Добавьте в ваш build.gradle:
+### 2. Добавьте в ваш build.gradle:
 
-```
+``` groovy
 dependencies {
 	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.10.1'
 }
@@ -47,30 +47,30 @@ dependencies {
 
 # Для связи с SDK
 
-1. Инициализация SDK:
+### 1. Инициализация SDK:
 
-```
+``` kotlin
 	var sdk = PayboxSdk.initialize(merchantID, "secretKey")
 ```
 
-2. Добавьте PaymentView в ваше activity:
+### 2. Добавьте PaymentView в ваше activity:
 
- ```
+ ```xml
  	<money.paybox.payboxsdk.view.PaymentView
             android:id="@+id/paymentView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
  ```
 
-3. Передайте экземпляр paymentView в sdk:
+### 3. Передайте экземпляр paymentView в sdk:
 
-```
+``` kotlin
 	sdk.setPaymentView(paymentView)
 ```
 
-4. Для отслеживания прогресса загрузки платежной страницы используйте WebListener:
+### 4. Для отслеживания прогресса загрузки платежной страницы используйте WebListener:
 
-```
+``` kotlin
     paymentView.listener = this
         
     override fun onLoadStarted() {
@@ -86,15 +86,15 @@ dependencies {
 
 # **Настройки SDK**
 
-*Тестовый режим:*
+### Тестовый режим:
 
-```
+``` kotlin
     sdk.config().testMode(enabled)  //По умолчанию тестовый режим включен
 ```
 
-*Выбор региона:*
+### Выбор региона:
 
-```
+``` kotlin
     sdk.config().setRegion(Region.DEAFAULT) //Region.DEAFAULT по умолчанию
 ```
 
@@ -106,71 +106,71 @@ dependencies {
 | `RU`       | Россия                                |
 | `UZ`       | Узбекистан                            |
 
-*Выбор платежной системы:*
+### Выбор платежной системы:
 
-```
+``` kotlin
     sdk.config().setPaymentSystem(paymentSystem)
 ```
 
-*Выбор валюты платежа:*
+### Выбор валюты платежа:
 
-```
+``` kotlin
     sdk.config().setCurrencyCode(code)
 ```
 
-*Активация автоклиринга:*
+### Активация автоклиринга:
 
-```
+``` kotlin
     sdk.config().autoClearing(enabled)
 ```
 
-*Установка кодировки:*
+### Установка кодировки:
 
-```
+``` kotlin
     sdk.config().setEncoding(encoding) //по умолчанию UTF-8
 ```
 
-*Время жизни рекурентного профиля:*
+### Время жизни рекурентного профиля:
 
-```
+``` kotlin
     sdk.config().setRecurringLifetime(lifetime) //по умолчанию 36 месяцев
 ```
 
-*Время жизни платежной страницы, в течение которого платеж должен быть завершен:*
+### Время жизни платежной страницы, в течение которого платеж должен быть завершен:
 
-```
+``` kotlin
     sdk.config().setPaymentLifetime(lifetime)  //по умолчанию 300 секунд
 ```
 
-*Включение режима рекурентного платежа:*
+### Включение режима рекурентного платежа:
 
-```
+``` kotlin
     sdk.config().recurringMode(enabled)  //по умолчанию отключен
 ```
 
-*Номер телефона клиента, будет отображаться на платежной странице. Если не указать, то будет
-предложено ввести на платежной странице:*
+### Номер телефона клиента, будет отображаться на платежной странице. Если не указать, то будет
+### предложено ввести на платежной странице:
 
-```
+``` kotlin
     sdk.config().setUserPhone(userPhone)
 ```
 
-*Email клиента, будет отображаться на платежной странице. Если не указать email, то будет предложено
-ввести на платежной странице:*
+### Email клиента, будет отображаться на платежной странице. Если не указать email, то будет предложено
+### ввести на платежной странице:
 
-```
+``` kotlin
     sdk.config().setUserEmail(userEmail)
 ```
 
-*Язык платежной страницы:*
+### Язык платежной страницы:
 
-```
+``` kotlin
     sdk.config().setLanguage(language)
 ```
 
-*Для передачи информации от платежного гейта:*
+### Для передачи информации от платежного гейта:
 
-```
+``` kotlin
     sdk.config().setCheckUrl(url)
     sdk.config().setResultUrl(url)
     sdk.config().setRefundUrl(url)
@@ -178,9 +178,9 @@ dependencies {
     sdk.config().setRequestMethod(requestMethod)
 ```
 
-*Для выбора Frame вместо платежной страницы:*
+### Для выбора Frame вместо платежной страницы:
 
-```
+``` kotlin
     sdk.config().setFrameRequired(true) //false по умолчанию
 ```
 
@@ -188,9 +188,9 @@ dependencies {
 
 # **Работа с SDK**
 
-## *Создание платежа:*
+### Создание платежа:
 
-```
+``` kotlin
     sdk.createPayment(amount, "description", "orderId", userId, extraParams) {
             payment, error ->   //Вызовется после оплаты
     }
@@ -198,95 +198,95 @@ dependencies {
 
 После вызова в paymentView откроется платежная страница
 
-## *Рекурентный платеж:*
+### Рекурентный платеж:
 
-```
+``` kotlin
    sdk.createRecurringPayment(amount,"description","recurringProfile", "orderId") {
             recurringPayment, error -> //Вызовется после оплаты
    }
 ```
 
-## *Получение статуса платежа:*
+### Получение статуса платежа:
 
-```
+``` kotlin
    sdk.getPaymentStatus(paymentId) {
             status, error ->  // Вызовется после получения ответа
    }
 ```
 
-## *Клиринг платежа:*
+### Клиринг платежа:
 
-```
+``` kotlin
    sdk.makeClearingPayment(paymentId, amount) {     // Если указать null вместо суммы клиринга, то клиринг пройдет на всю сумму платежа
             capture, error -> // Вызовется после клиринга
    }
 ```
 
-## *Отмена платежа:*
+### Отмена платежа:
 
-```
+``` kotlin
    sdk.makeCancelPayment(paymentId) {
             payment, error -> //Вызовется после отмены
    }
 ```
 
-## *Возврат платежа:*
+### Возврат платежа:
 
-```
+``` kotlin
    sdk.makeRevokePayment(paymentId, amount) {
             payment, error -> //Вызовется после возврата
    }
 ```
 
-## *Сохранение карты:*
+### Сохранение карты:
 
-```
+``` kotlin
    sdk.addNewCard(userId,"postLink") {
             payment, error -> // Вызовется после добавления
    }
 ```
 
-После вызова в paymentView откроется платежная страница
+- После вызова в paymentView откроется платежная страница
 
-## *Получить список сохраненых карт:*
+### Получить список сохраненых карт:
 
-```
+``` kotlin
    sdk.getAddedCards(userId){
             cards, error -> // Вызовется после получения ответа
    }
 ```
 
-## *Удаление сохраненой карты:*
+### Удаление сохраненой карты:
 
-```
+``` kotlin
    sdk.removeAddedCard(cardId, userId) {
             card, error ->  // Вызовется после получения ответа
    }
 ```
 
-## *Создание платежа сохраненой картой:*
+### Создание платежа сохраненой картой:
 
-```
+``` kotlin
    sdk.createCardPayment(amount, userId, "cardToken", "description", "orderId"){
             payment, error -> // Вызовется после создания
    }
 ```
 
-> *Внимание: Метод `createCardPayment` с использованием `cardId` является устаревшим.*
+- Внимание: Метод `createCardPayment` с использованием `cardId` является устаревшим.
 
-## *Для оплаты созданного платежа:*
+### Для оплаты созданного платежа:
 
-```
+``` kotlin
    sdk.payByCard(paymentId){
             payment, error -> //Вызовется после оплаты
    }
 ```
 
-После вызова в paymentView откроется платежная страница для 3ds аутентификации
+- После вызова в paymentView откроется платежная страница для 3ds аутентификации
 
 ## *Для оплаты созданного платежа c безакцепным списанием:*
 
-```
+``` kotlin
    sdk.createNonAcceptancePayment(paymentId, merchantId){
             payment, error -> //Вызовется после оплаты
    }
@@ -424,6 +424,7 @@ dependencies {
                 
                 // Код валюты (например, "KZT")
                 .setCurrencyCode("KZT")
+                
                 .build()
         )
         
