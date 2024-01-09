@@ -281,7 +281,7 @@ dependencies {
 
 - После вызова в paymentView откроется платежная страница для 3ds аутентификации
 
-## *Для оплаты созданного платежа c безакцепным списанием:*
+### Для оплаты созданного платежа c безакцепным списанием:
 
 ``` kotlin
    sdk.createNonAcceptancePayment(paymentId, merchantId){
