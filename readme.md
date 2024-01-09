@@ -24,7 +24,7 @@ PayBox SDK Android - это библиотека позволяющая упро
 # **Установка:**
 
 ### 1. Добавьте репозитории Jitpack в ваш build.gradle на уровне проекта в конец репозиториев
-   allprojects:
+###   allprojects:
 
 ``` groovy
 allprojects {
