@@ -23,8 +23,7 @@ PayBox SDK Android - это библиотека позволяющая упро
 
 # **Установка:**
 
-### 1. Добавьте репозитории Jitpack в ваш build.gradle на уровне проекта в конец репозиториев
-###   allprojects:
+### 1. Добавьте репозитории Jitpack в ваш build.gradle на уровне проекта в конец репозиториев allprojects:
 
 ``` groovy
 allprojects {
@@ -53,7 +52,7 @@ dependencies {
 	var sdk = PayboxSdk.initialize(merchantID, "secretKey")
 ```
 
-### 2. Добавьте PaymentView в ваше activity:
+### 2. Добавьте `PaymentView` в ваше activity:
 
  ```xml
  	<money.paybox.payboxsdk.view.PaymentView
@@ -68,7 +67,7 @@ dependencies {
 	sdk.setPaymentView(paymentView)
 ```
 
-### 4. Для отслеживания прогресса загрузки платежной страницы используйте WebListener:
+### 4. Для отслеживания прогресса загрузки платежной страницы используйте `WebListener`:
 
 ``` kotlin
     paymentView.listener = this
@@ -148,8 +147,7 @@ dependencies {
     sdk.config().recurringMode(enabled)  //по умолчанию отключен
 ```
 
-### Номер телефона клиента, будет отображаться на платежной странице. Если не указать, то будет
-### предложено ввести на платежной странице:
+### Номер телефона клиента, будет отображаться на платежной странице. Если не указать, то будет предложено ввести на платежной странице:
 
 ``` kotlin
     sdk.config().setUserPhone(userPhone)
