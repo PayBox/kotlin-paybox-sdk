@@ -1,6 +1,6 @@
 ### Paybox SDK (Android, kotlin)
 
-- `PayBox SDK` Android - это библиотека позволяющая упростить взаимодействие с API PayBox. Система SDK
+### PayBox SDK Android - это библиотека позволяющая упростить взаимодействие с API PayBox. Система SDK
 работает на Android 4.4 и выше
 
 [Скачать демонстрационный APK](https://github.com/PayBox/sample-android-kotlin-sdk/raw/master/sample-kotlin-sdk.apk)
