@@ -201,7 +201,16 @@ interface PayboxSdkInterface {
         paymentId: Int?,
         paymentPaid: (payment: Payment?, error: Error?) -> Unit
     )
-
+    /**
+     * Создание нового платежа через Google Pay
+     * @return
+     * @param amount сумма платежа
+     * @param description комментарии, описание платежа
+     * @param orderId ID заказа платежа
+     * @param userId ID пользователя в системе мерчанта
+     * @param extraParams доп. параметры мерчанта
+     * @param paymentPaid callback от Api Paybox
+     */
     fun createGooglePayment(
         amount: Float,
         description: String,
@@ -210,7 +219,13 @@ interface PayboxSdkInterface {
         extraParams: HashMap<String, String>?,
         paymentPaid: (payment: Payment?, error: Error?) -> Unit
     )
-
+    /**
+     * Подтверждение платежа
+     * @return
+     * @param url ссылка на сервис для подтверждения, полученная из запроса [createGooglePayment].
+     * @param token  токен от Google Pay
+     * @param paymentPaid callback от Api Paybox
+     */
     fun confirmGooglePayment(
         url: String,
         token: String,
