@@ -361,7 +361,7 @@ dependencies {
      googlePayButton.setOnClickListener {
      
      // Создание платежа с использованием Google Pay
-     sdk.createGooglePayment(amount,description,orderId,userId,extraParams) 
+     sdk.createGooglePayment(amount, description, orderId, userId, extraParams) 
      { payment, error -> // Вызывается после создания
      
        // Получаем url для подтверждения платежа
@@ -500,7 +500,7 @@ dependencies {
                         val token = paymentData?.paymentMethodToken?.token ?: return
                         
                         // После получения токена мы подтверждаем платеж, отправляя запрос на ранее полученный URL. 
-                        // следующий пункт №9               
+                        // Описано в пункте №9               
                         sdk.confirmGooglePayment(url, token) { payment, error ->
                         }
                     }
