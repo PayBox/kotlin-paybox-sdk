@@ -357,17 +357,17 @@ dependencies {
 ### 6. Создание платежа с использованием Google Pay:
 
 ```  kotlin
-     //Повесим на кнопку обработчик нажатий
+     // Повесим на кнопку обработчик нажатий
      googlePayButton.setOnClickListener {
      
-     //Создание платежа с использованием Google Pay
-     sdk.createGooglePayment(amount, userId, "cardToken", "description", "orderId")
+     // Создание платежа с использованием Google Pay
+     sdk.createGooglePayment(amount,description,orderId,userId,extraParams) 
      { payment, error -> // Вызывается после создания
      
-       //Получаем url для подтверждения платежа
+       // Получаем url для подтверждения платежа
        url = payment?.redirectUrl.toString()
        
-       //Инициирует загрузку данных платежа с использованием Google Pay
+       // Инициирует загрузку данных платежа с использованием Google Pay
        AutoResolveHelper.resolveTask<PaymentData>(
                     googlePaymentsClient.loadPaymentData(createPaymentDataRequest()),
                     this,
@@ -377,7 +377,7 @@ dependencies {
       }
      
        companion object {
-        //Код запроса, который будет использоваться при вызове
+        // Код запроса, который будет использоваться при вызове
              const val REQUEST_CODE = 123
        }
 	
@@ -499,8 +499,10 @@ dependencies {
                         val paymentData = PaymentData.getFromIntent(data)
                         val token = paymentData?.paymentMethodToken?.token ?: return
                         
-                        // После получения токена мы подтверждаем платеж, отправляя запрос на ранее полученный URL.
-                        sdk.confirmGooglePayment(url, token)
+                        // После получения токена мы подтверждаем платеж, отправляя запрос на ранее полученный URL. 
+                        // следующий пункт №9               
+                        sdk.confirmGooglePayment(url, token) { payment, error ->
+                        }
                     }
                     AutoResolveHelper.RESULT_ERROR -> {
                         if (data == null)
@@ -518,8 +520,7 @@ dependencies {
 
 - Подробнее:
     - `onActivityResult` - используется для обработки результатов, возвращаемых активностью
-      интеграции
-      с Google Pay.
+      интеграции с Google Pay.
 
     - `data` - объект , содержащий данные, возвращенные активностью.
 
