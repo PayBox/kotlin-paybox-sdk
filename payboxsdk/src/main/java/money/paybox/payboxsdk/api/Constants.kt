@@ -18,6 +18,7 @@ object Urls {
     const val ABOUT_BLANK = "about:blank"
     const val CARDSTORAGE = "/cardstorage/"
     const val CARD = "/card/"
+    const val PAY_ROUTE = "/pay/"
     const val LISTCARD_URL = "list"
     const val CARDINITPAY = "init"
     const val ADDCARD_URL = "add"
@@ -60,6 +61,10 @@ object Urls {
 
     fun nonAcceptanceDirect(merchant_id: String): String {
         return "${DEFAULT_FREEDOM_URL}v1/merchant/${merchant_id}${CARD}${DIRECT}"
+    }
+
+    fun confirmGooglePayUrl(paymentId: String): String {
+        return getCustomerUrl() + PAY_ROUTE + paymentId + "/$PAY"
     }
 }
 
@@ -129,4 +134,12 @@ object Params {
     const val TYPE = "type"
     const val PAYMENTSYSTEM = "paymentSystem"
     const val TOKEN = "token"
+    const val URL = "url"
+    const val STATUS_JSON = "status"
+    const val CODE = "code"
+    const val MESSAGE = "message"
+    const val OK = "ok"
+    const val DATA = "data"
+    const val BACK_URL = "back_url"
+    const val PARAMS = "params"
 }

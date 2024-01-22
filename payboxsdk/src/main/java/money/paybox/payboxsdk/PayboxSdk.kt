@@ -86,7 +86,8 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         params[Params.TYPE] = Params.GOOGLE_PAY
         params[Params.PAYMENTSYSTEM] = PaymentSystem.WAY4.name
         params[Params.TOKEN] = token
-        helper.initConnection(url, params, Params.GOOGLE_PAY)
+        val confirmUrl = Urls.confirmGooglePayUrl(url.split("pg_payment_id=").get(1))
+        helper.initConnection(confirmUrl, params, Params.GOOGLE_PAY)
     }
 
     override fun createPayment(
