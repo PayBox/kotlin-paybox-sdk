@@ -117,6 +117,10 @@ abstract class BaseApi : Signing() {
         )
     }
 
+    private fun JSONObject.getPaymentId(): String {
+        return this.optResponse(Params.REDIRECT_URL).toString().split("${Params.PAYMENT_ID}=").get(1)
+    }
+
     private fun JSONObject.getGooglePayPayment(): Payment {
         return Payment(
             status = this.getString(Params.STATUS_JSON),
@@ -263,7 +267,7 @@ abstract class BaseApi : Signing() {
         when {
             url.contains(Urls.initPaymentUrl()) -> {
                 if (paymentType == Params.GOOGLE_PAY) {
-                    this.listener.onGooglePayInited(json?.getPayment(), error)
+                    this.listener.onGooglePayInited(json?.getPaymentId(), error)
                 } else {
                     this.listener.onPaymentInited(json?.getPayment(), error)
                 }
@@ -310,7 +314,7 @@ abstract class BaseApi : Signing() {
             }
 
             url.contains(Urls.getCustomerUrl()) -> {
-                this.listener.onGooglePayInited(json?.getGooglePayPayment(), error)
+                this.listener.onGooglePayConfirmInited(json?.getGooglePayPayment(), error)
             }
         }
     }

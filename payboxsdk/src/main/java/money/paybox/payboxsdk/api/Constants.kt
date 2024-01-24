@@ -142,4 +142,5 @@ object Params {
     const val DATA = "data"
     const val BACK_URL = "back_url"
     const val PARAMS = "params"
+    const val resp ="\"{\\\"data\\\":{\\\"id\\\":1096649557,\\\"back_url\\\":{\\\"method\\\":\\\"GET\\\",\\\"url\\\":\\\"https://api.freedompay.money/success\\\",\\\"params\\\":{\\\"pg_order_id\\\":\\\"1234\\\",\\\"pg_payment_id\\\":1096649557,\\\"pg_salt\\\":\\\"5tqlNCswy2YBaQ24\\\",\\\"pg_sig\\\":\\\"545a3e7d4a788b8feb8b9ac0f341d9d2\\\"}},\\\"status\\\":\\\"ok\\\",\\\"payment_system_code\\\":\\\"WAY4\\\",\\\"helpdesk_email\\\":\\\"\\\",\\\"helpdesk_phone\\\":\\\"\\\",\\\"timeout_after_payment\\\":0,\\\"payment_info\\\":{\\\"payment_id\\\":1096649557},\\\"highlight\\\":{\\\"amount\\\":\\\"5,00KZT\\\"},\\\"highlight_by_color\\\":[],\\\"items\\\":[{\\\"order_id\\\":\\\"1234\\\",\\\"user_phone\\\":\\\"77\\\",\\\"user_email\\\":\\\"token@paybox.money\\\",\\\"seller\\\":\\\"u041cu0430u0433u0430u0437u0438u043d(Medetway4)\\\",\\\"commission\\\":\\\"0,00KZT\\\",\\\"total_amount\\\":\\\"5,00KZT\\\"},{\\\"card_number\\\":{\\\"icon\\\":\\\"visa\\\",\\\"value\\\":\\\"****6091\\\"}}],\\\"loyaltyBonus\\\":[],\\\"color_theme\\\":\\\"null\\\"}}\""
 }

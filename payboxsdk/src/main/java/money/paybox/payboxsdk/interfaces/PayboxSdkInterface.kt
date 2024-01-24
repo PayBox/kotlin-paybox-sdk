@@ -217,7 +217,7 @@ interface PayboxSdkInterface {
         orderId: String?,
         userId: String?,
         extraParams: HashMap<String, String>?,
-        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+        paymentPaid: (paymentId: String?, error: Error?) -> Unit
     )
     /**
      * Подтверждение платежа
@@ -227,7 +227,7 @@ interface PayboxSdkInterface {
      * @param paymentPaid callback от Api Paybox
      */
     fun confirmGooglePayment(
-        url: String,
+        paymentId: String,
         token: String,
         paymentPaid: (payment: Payment?, error: Error?) -> Unit
     )
