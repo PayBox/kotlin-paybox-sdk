@@ -24,7 +24,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
     private lateinit var helper: ApiHelper
     private var paymentView: WeakReference<PaymentView>? = null
     private var paymentPaidReference: ((payment: Payment?, error: Error?) -> Unit)? = null
-    private var paymentGooglePaidReference: ((payment: String?, error: Error?) -> Unit)? = null
+    private var googlePaymentPaidReference: ((payment: String?, error: Error?) -> Unit)? = null
     private var cardAddingReference: ((payment: Payment?, error: Error?) -> Unit)? = null
     private var canceledReference: ((payment: Payment?, error: Error?) -> Unit)? = null
     private var revokedReference: ((payment: Payment?, error: Error?) -> Unit)? = null
@@ -68,7 +68,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         extraParams: HashMap<String, String>?,
         paymentPaid: (paymentId: String?, error: Error?) -> Unit
     ) {
-        this.paymentGooglePaidReference = paymentPaid
+        this.googlePaymentPaidReference = paymentPaid
         val params = configs.getParams(extraParams)
         orderId?.let {
             params[Params.ORDER_ID] = it
@@ -328,7 +328,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
     }
 
     override fun onGooglePayInited(paymentId: String?, error: Error?) {
-        paymentGooglePaidReference?.let {
+        googlePaymentPaidReference?.let {
             it(paymentId, error)
         }
     }
