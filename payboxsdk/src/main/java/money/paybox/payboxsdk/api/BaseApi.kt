@@ -17,6 +17,7 @@ import javax.net.ssl.HttpsURLConnection
 
 private const val UTF8 = "UTF-8"
 private const val TIMEOUT = 25000
+private const val DECODE_PATTERN ="u([0-9a-fA-F]{4})"
 
 abstract class BaseApi : Signing() {
 
@@ -118,7 +119,11 @@ abstract class BaseApi : Signing() {
     }
 
     private fun JSONObject.getPaymentId(): String {
-        return this.optResponse(Params.REDIRECT_URL).toString().split("${Params.PAYMENT_ID}=").get(1)
+        val redirectUrl = this.optResponse(Params.REDIRECT_URL).toString().split("${Params.PAYMENT_ID}=")
+        if(redirectUrl.size > 1){
+            return redirectUrl.get(1)
+        }
+        return ""
     }
 
     private fun JSONObject.getGooglePayPayment(): Payment {
@@ -218,7 +223,7 @@ abstract class BaseApi : Signing() {
                     } else {
                         val message = data.getString(Params.MESSAGE)
                         val code = data.getString(Params.CODE)
-                        handleError(message, code.toInt(), it.url)
+                        handleError(message.unicodeDecode(), code.toInt(), it.url)
                     }
                 } else {
                     apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
@@ -231,7 +236,7 @@ abstract class BaseApi : Signing() {
                     val code = it.code
                     val jsonObject = JSONObject(it.response)
                     val message = jsonObject.getString(Params.MESSAGE)
-                    handleError(message, code, it.url)
+                    handleError(message.unicodeDecode(), code, it.url)
                 } else {
                     apiHandler(it.url, null, Error(it.code, it.response), paymentType)
                 }
@@ -316,6 +321,12 @@ abstract class BaseApi : Signing() {
             url.contains(Urls.getCustomerUrl()) -> {
                 this.listener.onGooglePayConfirmInited(json?.getGooglePayPayment(), error)
             }
+        }
+    }
+
+    fun String.unicodeDecode(): String {
+        return replace(DECODE_PATTERN.toRegex()) {
+            it.groupValues[1].toInt(16).toChar().toString()
         }
     }
 }
