@@ -138,10 +138,7 @@ object Params {
     const val STATUS_JSON = "status"
     const val CODE = "code"
     const val MESSAGE = "message"
-    const val OK = "ok"
     const val DATA = "data"
     const val BACK_URL = "back_url"
     const val PARAMS = "params"
-    const val err ="{\"data\":{\"id\":1096642466,\"back_url\":{\"method\":\"GET\",\"url\":\"https://api.freedompay.money/failure\",\"params\":{\"pg_order_id\":\"1234\",\"pg_payment_id\":1096642466,\"pg_salt\":\"zIoticzwrs2QdnFZ\",\"pg_sig\":\"4ac958f6ea29faa6dd867d873c967829\"}},\"status\":\"error\",\"payment_system_code\":\"WAY4\",\"helpdesk_email\":\"\",\"helpdesk_phone\":\"\",\"timeout_after_payment\":0,\"message\":\"u041eu0442u043au0430u0437u0430u043du043eu043fu043eu043fu0440u0438u0447u0438u043du0435u043du0430u0440u0443u0448u0435u043du0438u044fu0431u0435u0437u043eu043fu0430u0441u043du043eu0441u0442u0438u0434u0430u043du043du044bu0445u043au0430u0440u0442u044bu0441u043fu0438u0441u0430u043du0438u044f.u041eu0431u0440u0430u0442u0438u0442u0435u0441u044cu0432u0431u0430u043du043au0432u044bu043fu0443u0441u0442u0438u0432u0448u0438u0439u043au0430u0440u0442u0443\",\"code\":11024,\"hints\":[],\"payment_info\":{\"payment_id\":1096642466},\"highlight\":{\"amount\":\"5,00KZT\"}}}"
-     const val res ="{\"data\":{\"id\":1096649557,\"back_url\":{\"method\":\"GET\",\"url\":\"https://api.freedompay.money/success\",\"params\":{\"pg_order_id\":\"1234\",\"pg_payment_id\":1096649557,\"pg_salt\":\"5tqlNCswy2YBaQ24\",\"pg_sig\":\"545a3e7d4a788b8feb8b9ac0f341d9d2\"}},\"status\":\"ok\",\"payment_system_code\":\"WAY4\",\"helpdesk_email\":\"\",\"helpdesk_phone\":\"\",\"timeout_after_payment\":0,\"payment_info\":{\"payment_id\":1096649557},\"highlight\":{\"amount\":\"5,00KZT\"},\"highlight_by_color\":[],\"items\":[{\"order_id\":\"1234\",\"user_phone\":\"77\",\"user_email\":\"token@paybox.money\",\"seller\":\"u041cu0430u0433u0430u0437u0438u043d(Medetway4)\",\"commission\":\"0,00KZT\",\"total_amount\":\"5,00KZT\"},{\"card_number\":{\"icon\":\"visa\",\"value\":\"****6091\"}}],\"loyaltyBonus\":[],\"color_theme\":\"null\"}}"
 }
