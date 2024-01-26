@@ -2,7 +2,6 @@ package money.paybox.payboxsdk.api
 
 import android.annotation.SuppressLint
 import android.os.AsyncTask
-import android.util.Log
 import money.paybox.payboxsdk.interfaces.ApiListener
 import money.paybox.payboxsdk.models.*
 import org.json.JSONObject
