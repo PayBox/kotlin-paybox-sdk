@@ -201,44 +201,60 @@ abstract class BaseApi : Signing() {
         responseData?.let {
             if (!it.error) {
                 if (it.response.contains(Params.RESPONSE)) {
-                    try {
-                        val json = XML.toJSONObject(it.response, true)
-                        if (json.optResponse(Params.STATUS) != Params.ERROR) {
-                            apiHandler(it.url, json, null, paymentType)
-                        } else {
-                            handleError(json, it.url)
-                        }
-                    } catch (e: Exception) {
-                        apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
-                    }
+                    parseSuccessResponse(it, paymentType)
                 } else if (it.response.contains(Params.DATA)) {
-                    val jsonObject = JSONObject(it.response)
-                    val data = getData(jsonObject)
-                    val status = getResponseStatus(data)
-                    if (status != Params.ERROR) {
-                        apiHandler(it.url, data, null, paymentType)
-                    } else {
-                        val message = getMessage(data)
-                        val code = data.getString(Params.CODE)
-                        handleError(message.unicodeDecode(), code.toInt(), it.url)
-                    }
+                    parseSuccessData(it, paymentType)
                 } else {
                     apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
                 }
             } else {
                 if (it.response.contains(Params.RESPONSE)) {
-                    val json = XML.toJSONObject(it.response, true)
-                    handleError(json, it.url)
+                    parseErrorResponse(it)
                 } else if (it.response.contains(Params.DATA)) {
-                    val data = getData(JSONObject(it.response))
-                    val message = getMessage(data)
-                    val code = data.getString(Params.CODE)
-                    handleError(message.unicodeDecode(), code.toInt(), it.url)
+                    parseErrorData(it)
                 } else {
                     apiHandler(it.url, null, Error(it.code, it.response), paymentType)
                 }
             }
         }
+    }
+
+    private fun parseSuccessData(responseData: ResponseData, paymentType: String? = null) {
+        val jsonObject = JSONObject(responseData.response)
+        val data = getData(jsonObject)
+        val status = getResponseStatus(data)
+        if (status != Params.ERROR) {
+            apiHandler(responseData.url, data, null, paymentType)
+        } else {
+            val message = getMessage(data)
+            val code = data.getString(Params.CODE)
+            handleError(message.unicodeDecode(), code.toInt(), responseData.url)
+        }
+    }
+
+    private fun parseSuccessResponse(responseData: ResponseData, paymentType: String? = null) {
+        try {
+            val json = XML.toJSONObject(responseData.response, true)
+            if (json.optResponse(Params.STATUS) != Params.ERROR) {
+                apiHandler(responseData.url, json, null, paymentType)
+            } else {
+                handleError(json, responseData.url)
+            }
+        } catch (e: Exception) {
+            apiHandler(responseData.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
+        }
+    }
+
+    private fun parseErrorResponse(responseData: ResponseData) {
+        val json = XML.toJSONObject(responseData.response, true)
+        handleError(json, responseData.url)
+    }
+
+    private fun parseErrorData(responseData: ResponseData) {
+        val data = getData(JSONObject(responseData.response))
+        val message = getMessage(data)
+        val code = data.getString(Params.CODE)
+        handleError(message.unicodeDecode(), code.toInt(), responseData.url)
     }
 
     private fun handleError(json: JSONObject, url: String) {
@@ -253,11 +269,7 @@ abstract class BaseApi : Signing() {
     }
 
     private fun handleError(message: String, code: Int, url: String) {
-        apiHandler(
-            url, null, Error(
-                code ?: 520, message ?: Params.UNKNOWN_ERROR
-            )
-        )
+        apiHandler(url, null, Error(code, message))
     }
 
     private fun apiHandler(
@@ -321,27 +333,27 @@ abstract class BaseApi : Signing() {
         }
     }
 
-    fun getBackUrl(jsonObject: JSONObject): JSONObject {
+    private fun getBackUrl(jsonObject: JSONObject): JSONObject {
         return jsonObject.getJSONObject(Params.BACK_URL)
     }
 
-    fun getParams(jsonObject: JSONObject): JSONObject {
+    private fun getParams(jsonObject: JSONObject): JSONObject {
         return getBackUrl(jsonObject).getJSONObject(Params.PARAMS)
     }
 
-    fun getResponseStatus(jsonObject: JSONObject): String {
+    private fun getResponseStatus(jsonObject: JSONObject): String {
         return jsonObject.getString(Params.STATUS_JSON)
     }
 
-    fun getMessage(jsonObject: JSONObject): String {
+    private fun getMessage(jsonObject: JSONObject): String {
         return jsonObject.getString(Params.MESSAGE)
     }
 
-    fun getData(jsonObject: JSONObject): JSONObject {
+    private fun getData(jsonObject: JSONObject): JSONObject {
         return jsonObject.getJSONObject(Params.DATA)
     }
 
-    fun String.unicodeDecode(): String {
+    private fun String.unicodeDecode(): String {
         return replace(DECODE_PATTERN.toRegex()) {
             it.groupValues[1].toInt(16).toChar().toString()
         }
