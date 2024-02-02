@@ -197,5 +197,38 @@ interface PayboxSdkInterface {
      * @param paymentId ID платежа в системе Paybox
      * @param paymentPaid callback от Api Paybox
      */
-    fun createNonAcceptancePayment(paymentId: Int?, paymentPaid: (payment: Payment?, error: Error?)->Unit)
+    fun createNonAcceptancePayment(
+        paymentId: Int?,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    )
+    /**
+     * Создание нового платежа через Google Pay
+     * @return
+     * @param amount сумма платежа
+     * @param description комментарии, описание платежа
+     * @param orderId ID заказа платежа
+     * @param userId ID пользователя в системе мерчанта
+     * @param extraParams доп. параметры мерчанта
+     * @param paymentPaid callback от Api Paybox
+     */
+    fun createGooglePayment(
+        amount: Float,
+        description: String,
+        orderId: String?,
+        userId: String?,
+        extraParams: HashMap<String, String>?,
+        paymentPaid: (paymentId: String?, error: Error?) -> Unit
+    )
+    /**
+     * Подтверждение платежа
+     * @return
+     * @param paymentId идентификатор платежа полученный из запроса на инициализацию платежа [createGooglePayment].
+     * @param token  токен от Google Pay
+     * @param paymentPaid callback от Api Paybox
+     */
+    fun confirmGooglePayment(
+        paymentId: String,
+        token: String,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    )
 }

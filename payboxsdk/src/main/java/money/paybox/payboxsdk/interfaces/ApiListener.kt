@@ -15,4 +15,6 @@ interface ApiListener {
     fun onCardRemoved(card: Card?, error: Error?)
     fun onCardPayInited(payment: Payment?, error: Error?)
     fun onNonAcceptanceDirected(payment: Payment?, error: Error?)
+    fun onGooglePayInited(paymentId: String?, error: Error?)
+    fun onGooglePayConfirmInited(payment: Payment?, error: Error?)
 }

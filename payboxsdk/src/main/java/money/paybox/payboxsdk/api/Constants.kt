@@ -18,6 +18,7 @@ object Urls {
     const val ABOUT_BLANK = "about:blank"
     const val CARDSTORAGE = "/cardstorage/"
     const val CARD = "/card/"
+    const val PAY_ROUTE = "/pay/"
     const val LISTCARD_URL = "list"
     const val CARDINITPAY = "init"
     const val ADDCARD_URL = "add"
@@ -41,6 +42,13 @@ object Urls {
             RU -> CUSTOMER_RU_URL
         }
 
+    fun getCustomerDomain(): String =
+        when (region) {
+            DEFAULT -> CUSTOMER_DEFAULT_URL
+            UZ -> CUSTOMER_UZ_URL
+            RU -> CUSTOMER_RU_URL
+        }.replace("https://", "")
+
     fun statusUrl() = "${getBaseUrl()}get_status.php"
     fun initPaymentUrl() = "${getBaseUrl()}init_payment.php"
     fun revokeUrl() = "${getBaseUrl()}revoke.php"
@@ -60,6 +68,10 @@ object Urls {
 
     fun nonAcceptanceDirect(merchant_id: String): String {
         return "${DEFAULT_FREEDOM_URL}v1/merchant/${merchant_id}${CARD}${DIRECT}"
+    }
+
+    fun confirmGooglePayUrl(paymentId: String): String {
+        return getCustomerUrl() + PAY_ROUTE + paymentId + "/$PAY"
     }
 }
 
@@ -124,5 +136,16 @@ object Params {
     const val NONE = "NONE"
     const val FRAME = "frame"
     const val GET = "GET"
+    const val GOOGLE_PAY = "google_pay"
     const val CARD_TOKEN = "pg_card_token"
+    const val TYPE = "type"
+    const val PAYMENTSYSTEM = "paymentSystem"
+    const val TOKEN = "token"
+    const val URL = "url"
+    const val STATUS_JSON = "status"
+    const val CODE = "code"
+    const val MESSAGE = "message"
+    const val DATA = "data"
+    const val BACK_URL = "back_url"
+    const val PARAMS = "params"
 }

@@ -6,5 +6,6 @@ import java.util.*
 data class RequestData(
     val params: SortedMap<String, String>,
     val method: RequestMethod,
-    val url: String
+    val url: String,
+    val paymentType: String? = null
 )
