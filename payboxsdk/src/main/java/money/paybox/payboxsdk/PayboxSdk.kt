@@ -24,6 +24,7 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
     private lateinit var helper: ApiHelper
     private var paymentView: WeakReference<PaymentView>? = null
     private var paymentPaidReference: ((payment: Payment?, error: Error?) -> Unit)? = null
+    private var googlePaymentPaidReference: ((payment: String?, error: Error?) -> Unit)? = null
     private var cardAddingReference: ((payment: Payment?, error: Error?) -> Unit)? = null
     private var canceledReference: ((payment: Payment?, error: Error?) -> Unit)? = null
     private var revokedReference: ((payment: Payment?, error: Error?) -> Unit)? = null
@@ -65,9 +66,9 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         orderId: String?,
         userId: String?,
         extraParams: HashMap<String, String>?,
-        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+        paymentPaid: (paymentId: String?, error: Error?) -> Unit
     ) {
-        this.paymentPaidReference = paymentPaid
+        this.googlePaymentPaidReference = paymentPaid
         val params = configs.getParams(extraParams)
         orderId?.let {
             params[Params.ORDER_ID] = it
@@ -80,13 +81,17 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         helper.initConnection(Urls.initPaymentUrl(), params, Params.GOOGLE_PAY)
     }
 
-    override fun confirmGooglePayment(url: String, token: String,paymentPaid: (payment: Payment?, error: Error?) -> Unit) {
+    override fun confirmGooglePayment(
+        paymentId: String,
+        token: String,
+        paymentPaid: (payment: Payment?, error: Error?) -> Unit
+    ) {
         this.paymentPaidReference = paymentPaid
-        val params = HashMap<String,String>()
+        val params = HashMap<String, String>()
         params[Params.TYPE] = Params.GOOGLE_PAY
-        params[Params.PAYMENTSYSTEM] = PaymentSystem.WAY4.name
         params[Params.TOKEN] = token
-        helper.initConnection(url, params, Params.GOOGLE_PAY)
+        val confirmUrl = Urls.confirmGooglePayUrl(paymentId)
+        helper.initConnection(confirmUrl, params, Params.GOOGLE_PAY)
     }
 
     override fun createPayment(
@@ -321,7 +326,13 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         }
     }
 
-    override fun onGooglePayInited(payment: Payment?, error: Error?) {
+    override fun onGooglePayInited(paymentId: String?, error: Error?) {
+        googlePaymentPaidReference?.let {
+            it(paymentId, error)
+        }
+    }
+
+    override fun onGooglePayConfirmInited(payment: Payment?, error: Error?) {
         paymentPaidReference?.let {
             it(payment, error)
         }

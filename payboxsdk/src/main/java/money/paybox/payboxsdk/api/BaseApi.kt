@@ -5,10 +5,10 @@ import android.os.AsyncTask
 import money.paybox.payboxsdk.interfaces.ApiListener
 import money.paybox.payboxsdk.models.*
 import org.json.JSONObject
+import org.json.XML
 import java.io.*
 import java.net.ConnectException
 import java.net.URL
-import org.json.XML
 import java.net.URLEncoder
 import java.net.UnknownHostException
 import java.util.*
@@ -17,6 +17,7 @@ import javax.net.ssl.HttpsURLConnection
 
 private const val UTF8 = "UTF-8"
 private const val TIMEOUT = 25000
+private const val DECODE_PATTERN = "u([0-9a-fA-F]{4})"
 
 abstract class BaseApi : Signing() {
 
@@ -46,6 +47,12 @@ abstract class BaseApi : Signing() {
             connection.allowUserInteraction = false
             connection.doInput = true
             connection.doOutput = false
+
+            if (requestData.url.startsWith(Urls.getCustomerUrl() + Urls.PAY_ROUTE)) {
+                connection.setRequestProperty("Host", Urls.getCustomerDomain())
+                connection.setRequestProperty("Origin", Urls.getCustomerUrl())
+            }
+
             val stream = connection.outputStream
             val writer = BufferedWriter(
                 OutputStreamWriter(stream, UTF8)
@@ -117,6 +124,25 @@ abstract class BaseApi : Signing() {
         )
     }
 
+    private fun JSONObject.getPaymentId(): String? {
+        val splitUrl =
+            this.optResponse(Params.REDIRECT_URL).toString().split("${Params.PAYMENT_ID}=")
+        if (splitUrl.size > 1) {
+            return splitUrl[1]
+        }
+        return null
+    }
+
+    private fun JSONObject.getGooglePayPayment(): Payment {
+        return Payment(
+            status = getResponseStatus(this),
+            paymentId = getParams(this).getString(Params.PAYMENT_ID).toIntOrNull(),
+            merchantId = 0,
+            orderId = getParams(this).getString(Params.ORDER_ID).toIntOrNull(),
+            redirectUrl = getBackUrl(this).getString(Params.URL)
+        )
+    }
+
     private fun JSONObject.getCapture(): Capture {
         return Capture(
             this.optResponse(Params.STATUS),
@@ -181,23 +207,17 @@ abstract class BaseApi : Signing() {
         responseData?.let {
             if (!it.error) {
                 if (it.response.contains(Params.RESPONSE)) {
-                    try {
-                        val json = XML.toJSONObject(it.response, true)
-                        if (json.optResponse(Params.STATUS) != Params.ERROR) {
-                            apiHandler(it.url, json, null, paymentType)
-                        } else {
-                            handleError(json, it.url)
-                        }
-                    } catch (e: Exception) {
-                        apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
-                    }
+                    parseSuccessResponse(it, paymentType)
+                } else if (it.response.contains(Params.DATA)) {
+                    parseSuccessData(it, paymentType)
                 } else {
                     apiHandler(it.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
                 }
             } else {
                 if (it.response.contains(Params.RESPONSE)) {
-                    val json = XML.toJSONObject(it.response, true)
-                    handleError(json, it.url)
+                    parseErrorResponse(it, paymentType)
+                } else if (it.response.contains(Params.DATA)) {
+                    parseErrorData(it, paymentType)
                 } else {
                     apiHandler(it.url, null, Error(it.code, it.response), paymentType)
                 }
@@ -205,14 +225,50 @@ abstract class BaseApi : Signing() {
         }
     }
 
-    private fun handleError(json: JSONObject, url: String) {
+    private fun parseSuccessData(responseData: ResponseData, paymentType: String? = null) {
+        val jsonObject = JSONObject(responseData.response)
+        val data = getData(jsonObject)
+        val status = getResponseStatus(data)
+        if (status != Params.ERROR) {
+            apiHandler(responseData.url, data, null, paymentType)
+        } else {
+            parseErrorData(responseData)
+        }
+    }
+
+    private fun parseSuccessResponse(responseData: ResponseData, paymentType: String? = null) {
+        try {
+            val json = XML.toJSONObject(responseData.response, true)
+            if (json.optResponse(Params.STATUS) != Params.ERROR) {
+                apiHandler(responseData.url, json, null, paymentType)
+            } else {
+                parseErrorResponse(responseData, paymentType)
+            }
+        } catch (e: Exception) {
+            apiHandler(responseData.url, null, Error(0, Params.FORMAT_ERROR), paymentType)
+        }
+    }
+
+    private fun parseErrorResponse(responseData: ResponseData, paymentType: String? = null) {
+        val json = XML.toJSONObject(responseData.response, true)
         val code = json.optResponse(Params.ERROR_CODE)
         val description = json.optResponse(Params.ERROR_DESCRIPTION)
         apiHandler(
-            url, null, Error(
-                code?.toInt() ?: 520, description ?: Params.UNKNOWN_ERROR
-            )
+            responseData.url,
+            null,
+            Error(
+                code?.toInt() ?: 520,
+                description ?: Params.UNKNOWN_ERROR
+            ),
+            paymentType
         )
+    }
+
+    private fun parseErrorData(responseData: ResponseData, paymentType: String? = null) {
+        val data = getData(JSONObject(responseData.response))
+        val message = getMessage(data).unicodeDecode()
+        val code = data.getString(Params.CODE).toInt()
+        apiHandler(responseData.url, null, Error(code, message), paymentType)
     }
 
     private fun apiHandler(
@@ -224,7 +280,13 @@ abstract class BaseApi : Signing() {
         when {
             url.contains(Urls.initPaymentUrl()) -> {
                 if (paymentType == Params.GOOGLE_PAY) {
-                    this.listener.onGooglePayInited(json?.getPayment(), error)
+                    val paymentId = json?.getPaymentId()
+                    if (paymentId == null) {
+                        val localError = Error(0, Params.PAYMENT_FAILURE)
+                        this.listener.onGooglePayInited(null, localError)
+                    } else {
+                        this.listener.onGooglePayInited(paymentId, error)
+                    }
                 } else {
                     this.listener.onPaymentInited(json?.getPayment(), error)
                 }
@@ -269,9 +331,36 @@ abstract class BaseApi : Signing() {
             url.contains(Urls.CARD + Urls.DIRECT) -> {
                 this.listener.onNonAcceptanceDirected(json?.getPayment(), error)
             }
-            url.contains(Urls.getCustomerUrl()) -> {
-                this.listener.onGooglePayInited(json?.getPayment(), error)
+
+            url.contains(Urls.getCustomerUrl() + Urls.PAY_ROUTE) -> {
+                this.listener.onGooglePayConfirmInited(json?.getGooglePayPayment(), error)
             }
+        }
+    }
+
+    private fun getBackUrl(jsonObject: JSONObject): JSONObject {
+        return jsonObject.getJSONObject(Params.BACK_URL)
+    }
+
+    private fun getParams(jsonObject: JSONObject): JSONObject {
+        return getBackUrl(jsonObject).getJSONObject(Params.PARAMS)
+    }
+
+    private fun getResponseStatus(jsonObject: JSONObject): String {
+        return jsonObject.getString(Params.STATUS_JSON)
+    }
+
+    private fun getMessage(jsonObject: JSONObject): String {
+        return jsonObject.getString(Params.MESSAGE)
+    }
+
+    private fun getData(jsonObject: JSONObject): JSONObject {
+        return jsonObject.getJSONObject(Params.DATA)
+    }
+
+    private fun String.unicodeDecode(): String {
+        return replace(DECODE_PATTERN.toRegex()) {
+            it.groupValues[1].toInt(16).toChar().toString()
         }
     }
 }
