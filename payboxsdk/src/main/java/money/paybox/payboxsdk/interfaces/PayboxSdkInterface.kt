@@ -222,7 +222,7 @@ interface PayboxSdkInterface {
     /**
      * Подтверждение платежа
      * @return
-     * @param url ссылка на сервис для подтверждения, полученная из запроса [createGooglePayment].
+     * @param paymentId идентификатор платежа полученный из запроса на инициализацию платежа [createGooglePayment].
      * @param token  токен от Google Pay
      * @param paymentPaid callback от Api Paybox
      */

@@ -89,7 +89,6 @@ class PayboxSdk() : PayboxSdkInterface, ApiListener, Signing() {
         this.paymentPaidReference = paymentPaid
         val params = HashMap<String, String>()
         params[Params.TYPE] = Params.GOOGLE_PAY
-        params[Params.PAYMENTSYSTEM] = PaymentSystem.WAY4.name
         params[Params.TOKEN] = token
         val confirmUrl = Urls.confirmGooglePayUrl(paymentId)
         helper.initConnection(confirmUrl, params, Params.GOOGLE_PAY)

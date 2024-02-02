@@ -42,6 +42,13 @@ object Urls {
             RU -> CUSTOMER_RU_URL
         }
 
+    fun getCustomerDomain(): String =
+        when (region) {
+            DEFAULT -> CUSTOMER_DEFAULT_URL
+            UZ -> CUSTOMER_UZ_URL
+            RU -> CUSTOMER_RU_URL
+        }.replace("https://", "")
+
     fun statusUrl() = "${getBaseUrl()}get_status.php"
     fun initPaymentUrl() = "${getBaseUrl()}init_payment.php"
     fun revokeUrl() = "${getBaseUrl()}revoke.php"
