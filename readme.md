@@ -531,7 +531,7 @@ dependencies {
       при разрешении запроса.
 
 
-### 9. Подтверждение платеж:
+### 9. Подтверждение платежа:
 
 ``` kotlin
  sdk.confirmGooglePayment(url, token) { payment, error -> }
