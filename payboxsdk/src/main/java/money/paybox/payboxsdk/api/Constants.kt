@@ -129,6 +129,7 @@ object Params {
     const val RECURRING_PROFILE = "pg_recurring_profile"
     const val AMOUNT = "pg_amount"
     const val PAYMENT_ID = "pg_payment_id"
+    const val CUSTOMER = "customer"
     const val TIMEOUT_AFTER_PAYMENT = "pg_timeout_after_payment"
     const val PAYMENT_ROUTE = "pg_payment_route"
     const val CARD = "card"
