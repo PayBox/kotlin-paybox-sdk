@@ -125,10 +125,19 @@ abstract class BaseApi : Signing() {
     }
 
     private fun JSONObject.getPaymentId(): String? {
-        val splitUrl =
-            this.optResponse(Params.REDIRECT_URL).toString().split("${Params.PAYMENT_ID}=")
+        val url = this.optResponse(Params.REDIRECT_URL).toString()
+        var splitUrl = listOf<String>()
+
+        if (url.contains("${Params.PAYMENT_ID}=")) {
+            splitUrl = url.split("${Params.PAYMENT_ID}=")
+        }
+
+        if (url.contains("${Params.CUSTOMER}=")) {
+            splitUrl = url.split("${Params.CUSTOMER}=")
+        }
+
         if (splitUrl.size > 1) {
-            return splitUrl[1]
+            return splitUrl[1].split("&")[0]
         }
         return null
     }
