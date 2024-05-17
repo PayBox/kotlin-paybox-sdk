@@ -16,9 +16,7 @@ android {
         minSdk 19
         targetSdk 33
         versionCode 1
-        versionName "0.11.2"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName "0.12.0"
     }
 
     buildTypes {
@@ -51,8 +49,8 @@ android {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.annotation:annotation-jvm:1.7.1'
 }
 repositories {
     mavenCentral()

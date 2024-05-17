@@ -6,10 +6,10 @@ import money.paybox.payboxsdk.config.Region.RU
 import money.paybox.payboxsdk.config.Region.UZ
 
 object Urls {
-    const val DEFAULT_FREEDOM_URL = "https://api.freedompay.money/"
+    const val DEFAULT_FREEDOM_URL = "https://api.freedompay.kz/"
     const val RU_PAYBOX_URL = "https://api.paybox.ru/"
     const val UZ_FREEDOM_URL = "https://api.freedompay.uz/"
-    const val CUSTOMER_DEFAULT_URL = "https://customer.freedompay.money"
+    const val CUSTOMER_DEFAULT_URL = "https://customer.freedompay.kz"
     const val CUSTOMER_RU_URL = "https://customer.paybox.ru"
     const val CUSTOMER_UZ_URL = "https://customer.freedompay.uz"
 
