@@ -2,6 +2,7 @@ package money.paybox.payboxsdk.api
 
 import money.paybox.payboxsdk.config.Region
 import money.paybox.payboxsdk.config.Region.DEFAULT
+import money.paybox.payboxsdk.config.Region.KG
 import money.paybox.payboxsdk.config.Region.RU
 import money.paybox.payboxsdk.config.Region.UZ
 
@@ -9,9 +10,11 @@ object Urls {
     const val DEFAULT_FREEDOM_URL = "https://api.freedompay.kz/"
     const val RU_PAYBOX_URL = "https://api.paybox.ru/"
     const val UZ_FREEDOM_URL = "https://api.freedompay.uz/"
+    const val KG_FREEDOM_URL = "https://api.freedompay.kg/"
     const val CUSTOMER_DEFAULT_URL = "https://customer.freedompay.kz"
     const val CUSTOMER_RU_URL = "https://customer.paybox.ru"
     const val CUSTOMER_UZ_URL = "https://customer.freedompay.uz"
+    const val CUSTOMER_KG_URL = "https://customer.freedompay.kg"
 
 
     const val PAY_HTML = "pay.html"
@@ -26,6 +29,8 @@ object Urls {
     const val REMOVECARD_URL = "remove"
     const val DIRECT = "direct"
 
+    const val SAMSUNG_PAY_URL = "samsungpay://"
+
     var region: Region = DEFAULT
 
     fun getBaseUrl(): String =
@@ -33,6 +38,7 @@ object Urls {
             DEFAULT -> DEFAULT_FREEDOM_URL
             UZ -> UZ_FREEDOM_URL
             RU -> RU_PAYBOX_URL
+            KG -> KG_FREEDOM_URL
         }
 
     fun getCustomerUrl(): String =
@@ -40,6 +46,7 @@ object Urls {
             DEFAULT -> CUSTOMER_DEFAULT_URL
             UZ -> CUSTOMER_UZ_URL
             RU -> CUSTOMER_RU_URL
+            KG -> CUSTOMER_KG_URL
         }
 
     fun getCustomerDomain(): String =
@@ -47,6 +54,7 @@ object Urls {
             DEFAULT -> CUSTOMER_DEFAULT_URL
             UZ -> CUSTOMER_UZ_URL
             RU -> CUSTOMER_RU_URL
+            KG -> CUSTOMER_KG_URL
         }.replace("https://", "")
 
     fun statusUrl() = "${getBaseUrl()}get_status.php"

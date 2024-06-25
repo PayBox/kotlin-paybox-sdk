@@ -1,11 +1,15 @@
 package money.paybox.payboxsdk.view
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
@@ -66,6 +70,13 @@ class PaymentView : FrameLayout {
         webSettings.allowFileAccess = true
         webSettings.allowFileAccessFromFileURLs = true
         webSettings.allowUniversalAccessFromFileURLs = true
+        webSettings.loadsImagesAutomatically = true
+        webSettings.domStorageEnabled = true
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        }
+
         webView.webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -81,6 +92,17 @@ class PaymentView : FrameLayout {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url == null) {
                     return false
+                }
+
+                if (url.startsWith(Urls.SAMSUNG_PAY_URL)) {
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        context.startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        // Samsung Pay app not found
+                    }
+
+                    return true
                 }
 
                 if (url.startsWith(Urls.successUrl()) || url.startsWith(Urls.failureUrl())) {
