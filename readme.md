@@ -38,7 +38,7 @@ allprojects {
 
 ``` groovy
 dependencies {
-	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.12.0'
+	implementation 'com.github.PayBox:kotlin-paybox-sdk:0.13.0'
 }
 ```
 
@@ -104,6 +104,7 @@ dependencies {
 | `DEAFAULT` | Казахстан и другие страны присутствия |
 | `RU`       | Россия                                |
 | `UZ`       | Узбекистан                            |
+| `KG`       | Кыргызстан                            |
 
 ### Выбор платежной системы:
 

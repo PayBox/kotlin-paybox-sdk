@@ -34,5 +34,5 @@ enum class Language {
 }
 
 enum class Region {
-    DEFAULT, RU, UZ
+    DEFAULT, RU, UZ, KG
 }
